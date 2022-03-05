@@ -9,6 +9,7 @@ Pages:
 -   Choose between round containers or slim containers
 -   Input quantity
 -   Show price per unit and total price for given quantity
+-   Select if purchase new bottle or swap new bottle
 -   Select if for pickup or for delivery
 -   If for delivery, request for address and add option to schedule delivery or deliver immediately
 - Log in page (Admin login only)

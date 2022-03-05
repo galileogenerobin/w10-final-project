@@ -89,8 +89,17 @@ def logout():
     # Redirect user to login form
     return redirect("/")
 
+
+@app.route("/submit-order")
+def submit_order():
+    # Sample comment
+    """ TODO submit order"""
+    return redirect("/")
+
+
 @app.route("/orders")
 def manage_orders():
+    # Sample comment
     """ TODO manage orders page"""
     return render_template("index.html")
 

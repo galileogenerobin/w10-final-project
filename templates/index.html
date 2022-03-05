@@ -1,11 +1,102 @@
 {% extends "layout.html" %}
 
+{% block head %}
+<!--https://developers.google.com/maps/documentation/javascript/examples/places-searchbox#maps_places_searchbox-html-->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <!--<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>-->
+    <script src="/static/index.js"></script>
+{% endblock %}
+
 {% block title %}
     Order Now
 {% endblock %}
 
 {% block main %}
     <div class="container">
-        Content to be updated soon
+        <div class="row">
+            <div class="col-sm-3"></div>
+            
+            <div class="col-sm-6 order-form inner-text">
+                <h1 class="mb-4 fw-bolder">Order Now</h1>
+
+                <form action="/submit-order">
+                    <div class="row">
+                        <label class="col-sm-6 col-form-label">Select container type:</label>
+                        <div class="col-sm-6">
+                            <select class="mx-2 form-select-sm no-selection" aria-label="Selection" id="container-type" name="container-type">
+                                <option selected disabled>Select water container</option>
+                                <option value="round-container">Round container</option>
+                                <option value="slim-container">Slim container</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label class="col-sm-6 col-form-label">Quantity (containers):</label>
+                        <div class="col-sm-6">
+                            <input class="mx-2 text-end" type="number" id="quantity" name="quantity" min="0">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label class="col-sm-6 col-form-label">Swap container or buy new:</label>
+                        <div class="col-sm-6">
+                            <select class="mx-2 form-select-sm no-selection" aria-label="Selection" id="swap-new" name="new-container">
+                                <option selected disabled>Swap or buy</option>
+                                <option value="Swap">Swap container</option>
+                                <option value="New">Buy new container</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label class="col-sm-6 col-form-label">Pick up or delivery:</label>
+                        <div class="col-sm-6">
+                            <select class="mx-2 form-select-sm no-selection" aria-label="Selection" id="delivery-mode" name="delivery-mode">
+                                <option selected disabled>Pick up or delivery</option>
+                                <option value="Pick up">Pick up</option>
+                                <option value="Delivery">Delivery</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label class="col-sm-6 col-form-label">Price per unit:</label>
+                        <div class="col-sm-6 col-form-label not-bold">
+                            <div id="price-text">PhP 0.00</div>
+                            <input type="hidden" id="price" name="price" value="PLACEHOLDER TO BE UPDATED WITH JAVASCRIPT">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label class="col-sm-6 col-form-label">Total price:</label>
+                        <div class="col-sm-6 col-form-label">
+                            <div id="total-text">PhP 0.00</div>
+                            <input type="hidden" name="total" value="PLACEHOLDER TO BE UPDATED WITH JAVASCRIPT">
+                        </div>
+                    </div>
+
+                    <!--Update with Javascript, show if for delivery-->
+                    <div class="row">
+                        <label class="col-sm-6 col-form-label">Delivery Address:</label>
+                        <div class="col-sm-6">
+                            <input class="controls my-2" type="text" disabled rows="5" id="delivery-address" name="delivery-address" placeholder="Delivery Address"/>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <input type="submit">
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-3"></div>
+        </div>
+
+        <!--
+        -   Choose between round containers or slim containers (ok)
+        -   Input quantity (ok)
+        -   Show price per unit and total price for given quantity (ok)
+        -   Select if for pickup or for delivery (ok)
+        -   If for delivery, request for address and add option to schedule delivery or deliver immediately-->
     </div>
 {% endblock %}
