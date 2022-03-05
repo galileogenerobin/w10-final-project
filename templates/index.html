@@ -1,47 +1,11 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Portfolio
+    Order Now
 {% endblock %}
 
 {% block main %}
     <div class="container">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th class="text-start">Symbol</th>
-                    <th class="text-start">Name</th>
-                    <th class="text-end">Shares</th>
-                    <th class="text-end">Price</th>
-                    <th class="text-end">TOTAL</th>
-                </tr>
-            </thead>
-        <tbody>
-                {% for entry in stocks %}
-                    <tr>
-                        <td class="text-start">{{ entry['symbol'] }}</td>
-                        <td class="text-start">{{ entry['name'] }}</td>
-                        <td class="text-end">{{ entry['shares'] }}</td>
-                        <td class="text-end">{{ entry['price'] | usd }}</td>
-                        <td class="text-end">{{ (entry['shares'] * entry['price']) | usd }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td class="border-0 fw-bold text-end" colspan="4">Stocks Total</td>
-                    <td class="border-0 text-end">{{ stocks_value | usd }}</td>
-                </tr>
-                <tr>
-                    <td class="border-0 fw-bold text-end" colspan="4">Cash Balance</td>
-                    <td class="border-0 text-end">{{ balance | usd }}</td>
-                </tr>
-                <tr>
-                    <td class="fw-bold text-end" colspan="4">TOTAL</td>
-                    {# For update #}
-                    <td class="fw-bold text-end">{{ (stocks_value + balance) | usd}}</td>
-                </tr>
-            </tfoot>
-        </table>
+        Content to be updated soon
     </div>
 {% endblock %}
