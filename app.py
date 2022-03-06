@@ -26,7 +26,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Configure CS50 Library to use SQLite database
-db = SQL("sqlite:///finance.db")
+db = SQL("sqlite:///water-oms.db")
 
 
 @app.after_request
@@ -39,17 +39,8 @@ def after_request(response):
 
 
 @app.route("/")
-@login_required
 def index():
-    """Show portfolio of stocks"""
-    user = session["user_id"]
-    stocks = db.execute(
-        "SELECT symbol, name, SUM(shares) AS shares, price FROM transactions WHERE user_id = ? GROUP BY symbol HAVING SUM(shares) > 0", user)
-    balance = db.execute("SELECT cash FROM users WHERE id = ?", user)[0]['cash']
-    stocks_value = 0
-    for entry in stocks:
-        stocks_value += entry['shares'] * entry['price']
-    return render_template("index.html", stocks=stocks, balance=balance, stocks_value=stocks_value)
+    return render_template("index.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -97,4 +88,29 @@ def logout():
 
     # Redirect user to login form
     return redirect("/")
-    
+
+
+@app.route("/submit-order")
+def submit_order():
+    # Sample comment
+    """ TODO submit order"""
+    return redirect("/")
+
+
+@app.route("/orders")
+def manage_orders():
+    # Sample comment
+    """ TODO manage orders page"""
+    return render_template("index.html")
+
+
+@app.route("/sales")
+def manage_sales():
+    """ TODO sales page"""
+    return render_template("index.html")
+
+
+@app.route("/history")
+def order_history():
+    """ TODO order history page"""
+    return render_template("index.html")

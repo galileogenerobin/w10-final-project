@@ -1,20 +1,117 @@
-/* // Sass sample */
+/* Importing fonts from Google APIs */
+@import url("https://fonts.googleapis.com/css?family=Montserrat");
+
+/* Setting up custom variables */
+:root {
+  --blue: #1565c0;
+  --dark-blue: #094e9e;
+  --light-blue: #588bd1;
+  --red: #ea433b;
+  --yellow: #f5b82e;
+  --green: #2e944b;
+  --light-gray: rgb(156, 156, 156);
+}
+
 /* Size for brand */
 nav .navbar-brand {
   font-size: xx-large;
-  background-color: aquamarine;
 }
 nav .navbar-brand .blue {
-  color: #537fbe;
-}
-nav .navbar-brand .red {
-  color: #ea433b;
-}
-nav .navbar-brand .yellow {
-  color: #f5b82e;
-}
-nav .navbar-brand .green {
-  color: #2e944b;
+  color: var(--blue);
 }
 
-/*# sourceMappingURL=styles.css.map */
+/* Overriding some Bootstrap body properties (i.e. font family) */
+body {
+  font-family: 'Montserrat', sans-serif !important
+}
+
+/* Styling for the order page */
+select {
+  width: auto !important;
+  height: 2rem;
+  font-size: 1rem !important;
+}
+
+.not-bold {
+  font-weight: normal !important;
+}
+
+/* To be applied to the select forms if no valid entry is selected yet */
+.no-selection {
+  color: var(--light-gray);
+  background-color: white !important;
+  height: auto;
+}
+
+.order-form {
+  /* background-color: var(--blue); */
+  background-color: transparent;
+  padding: 2rem;
+  border-radius: 5px;
+  position: relative;
+  color: var(--blue);
+}
+
+/* Overriding input group text properties */
+.input-group-text {
+  font-weight: bold;
+
+  /* background-color: var(--light-blue);
+  color: white; */
+
+  background-color: transparent;
+  color: black;
+  border: 0;
+  margin-right: 1rem;
+  /* border-radius: 10px !important; */
+}
+
+/* Creating a new class for an input group entry*/
+.input-group-entry {
+  border-radius: 10px !important;
+}
+
+
+/* Overriding Bootsrap form properties */
+.form-select, .form-control {
+  border-width: 1px !important;
+}
+
+.form-select:focus, .form-control:focus {
+  border-color: var(--blue) !important;
+  /* border-width: 2px; */
+  outline: 0;
+  box-shadow: none !important;
+}
+
+/* Custom form class for read-only text */
+.form-read-only {
+  color: black;
+  background-color: transparent !important;
+  border: none;
+  /* border-top: 0;
+  border-bottom: 0;
+  border-right: 0; */
+}
+
+
+/* Overriding Bootstrap button properties */
+.btn {
+  border-radius: 20px !important;
+  font-weight: bold;
+}
+
+.btn-primary {
+  background-color: var(--blue);
+  border-color: var(--blue);
+}
+
+.btn-primary:hover {
+  background-color: var(--dark-blue);
+  border-color: var(--dark-blue);
+}
+
+/* If we want to hide something; not used yet */
+.hidden {
+  display: none;
+}

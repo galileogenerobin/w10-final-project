@@ -10,7 +10,6 @@ $green: #2e944b;
 nav .navbar-brand
 {
     font-size: xx-large;
-    background-color: aquamarine;
 
     .blue {
         color: $blue;
@@ -26,5 +25,12 @@ nav .navbar-brand
 
     .green {
         color: $green;
+    }
+}
+
+form
+{
+    div {
+        margin-bottom: 1rem;
     }
 }
