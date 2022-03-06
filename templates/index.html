@@ -14,80 +14,65 @@
 {% block main %}
     <div class="container">
         <div class="row">
+            <!-- We use Bootstrap's grid system to center our order form on the screen by assigning column classes (12-column grid) -->
             <div class="col-sm-3"></div>
             
-            <div class="col-sm-6 order-form inner-text">
-                <h1 class="mb-4 fw-bolder">Order Now</h1>
+            <div class="col-sm-6 order-form">
+                <h1 class="mb-4 fw-bold">Order Now</h1>
 
-                <form action="/submit-order">
+                <form action="/submit-order" method="post">
+                    <!-- We use Bootstrap's "input-group" to group each line in our input form -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Quantity (containers):</span>
+                        <input class="form-control text-end input-group-entry" type="number" id="quantity" name="quantity" min="0" placeholder="">
+                    </div>
+
+                    <!-- TODO change the succeeding select elements to radio buttons -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Select container type:</span>
+                        <select class="form-select no-selection text-end input-group-entry" id="container-type" name="container-type">
+                            <option selected disabled>Select option</option>
+                            <option value="round-container">Round container</option>
+                            <option value="slim-container">Slim container</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Swap or buy new:</span>
+                        <select class="form-select no-selection text-end input-group-entry" id="swap-new" name="new-container">
+                            <option selected disabled>Select option</option>
+                            <option value="Swap">Swap container</option>
+                            <option value="New">Buy new container</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group mb-5">
+                        <span class="input-group-text">Pick up or delivery:</span>
+                        <select class="form-select no-selection text-end input-group-entry" id="delivery-mode" name="delivery-mode">
+                            <option selected disabled>Select option</option>
+                            <option value="Pick up">Pick up</option>
+                            <option value="Delivery">Delivery</option>
+                        </select>            
+                    </div>
+
+                    <div class="input-group">
+                        <span class="input-group-text">Price per unit:</span>
+                        <input class="form-control text-end form-read-only input-group-entry" disabled type="text" id="price" name="price" value="PhP 0.00">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Total price:</span>
+                        <input class="form-control text-end form-read-only fw-bold input-group-entry" disabled type="text" id="total" name="total" value="PhP 0.00">
+                    </div>
+                    
                     <div class="row">
-                        <label class="col-sm-6 col-form-label">Select container type:</label>
-                        <div class="col-sm-6">
-                            <select class="mx-2 form-select-sm no-selection" aria-label="Selection" id="container-type" name="container-type">
-                                <option selected disabled>Select water container</option>
-                                <option value="round-container">Round container</option>
-                                <option value="slim-container">Slim container</option>
-                            </select>
-                        </div>
+                        <span class="col-3"></span>
+                        <button class="btn btn-primary col-6" type="submit">Place order</button>
+                        <span class="col-3"></span>
                     </div>
-
-                    <div class="row">
-                        <label class="col-sm-6 col-form-label">Quantity (containers):</label>
-                        <div class="col-sm-6">
-                            <input class="mx-2 text-end" type="number" id="quantity" name="quantity" min="0">
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label class="col-sm-6 col-form-label">Swap container or buy new:</label>
-                        <div class="col-sm-6">
-                            <select class="mx-2 form-select-sm no-selection" aria-label="Selection" id="swap-new" name="new-container">
-                                <option selected disabled>Swap or buy</option>
-                                <option value="Swap">Swap container</option>
-                                <option value="New">Buy new container</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label class="col-sm-6 col-form-label">Pick up or delivery:</label>
-                        <div class="col-sm-6">
-                            <select class="mx-2 form-select-sm no-selection" aria-label="Selection" id="delivery-mode" name="delivery-mode">
-                                <option selected disabled>Pick up or delivery</option>
-                                <option value="Pick up">Pick up</option>
-                                <option value="Delivery">Delivery</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label class="col-sm-6 col-form-label">Price per unit:</label>
-                        <div class="col-sm-6 col-form-label not-bold">
-                            <div id="price-text">PhP 0.00</div>
-                            <input type="hidden" id="price" name="price" value="PLACEHOLDER TO BE UPDATED WITH JAVASCRIPT">
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label class="col-sm-6 col-form-label">Total price:</label>
-                        <div class="col-sm-6 col-form-label">
-                            <div id="total-text">PhP 0.00</div>
-                            <input type="hidden" name="total" value="PLACEHOLDER TO BE UPDATED WITH JAVASCRIPT">
-                        </div>
-                    </div>
-
-                    <!--Update with Javascript, show if for delivery-->
-                    <div class="row">
-                        <label class="col-sm-6 col-form-label">Delivery Address:</label>
-                        <div class="col-sm-6">
-                            <input class="controls my-2" type="text" disabled rows="5" id="delivery-address" name="delivery-address" placeholder="Delivery Address"/>
-                        </div>
-                    </div>
-
-                    <div class="row mt-3">
-                        <input type="submit">
-                    </div>
+                    
                 </form>
+
             </div>
             <div class="col-sm-3"></div>
         </div>
@@ -97,6 +82,6 @@
         -   Input quantity (ok)
         -   Show price per unit and total price for given quantity (ok)
         -   Select if for pickup or for delivery (ok)
-        -   If for delivery, request for address and add option to schedule delivery or deliver immediately-->
+        -   If for delivery, request for address and add option to schedule delivery or deliver immediately; Delivery to be handled in another page-->
     </div>
 {% endblock %}

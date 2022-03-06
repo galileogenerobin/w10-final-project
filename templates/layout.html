@@ -16,6 +16,7 @@
         <!-- https://favicon.io/emoji-favicons/money-bag/ -->
         <link href="/static/favicon.ico" rel="icon">
 
+        <!-- My own styling -->
         <link href="/static/styles.css" rel="stylesheet">
 
         <!--For custom / page-specific head data-->
@@ -47,14 +48,14 @@
                         </ul>
                     {% else %}
                         <ul class="navbar-nav ms-auto mt-2">
-                            <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/login">Admin Log In</a></li>
                         </ul>
                     {% endif %}
                 </div>
             </div>
         </nav>
 
-        <main class="container-fluid py-5 text-center">
+        <main class="container-fluid text-center">
             {% block main %}{% endblock %}
         </main>
 
