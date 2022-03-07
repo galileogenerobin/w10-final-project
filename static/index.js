@@ -1,11 +1,9 @@
-let containerTypeElement;
 let containerType;
-let quantityElement;
 let quantity;
-let swapNewElement;
 let swapNew;
-let deliveryModeElement;
 let deliveryMode;
+let pricePerUnit = 0;
+let deliveryFee = 0;
 let pricePerUnitElement;
 let subtotalElement;
 let deliveryFeeElement;
@@ -18,10 +16,6 @@ const ORDER_TEXT_COLOR = 'rgb(40, 40, 40)';
 
 $(document).ready(function () {
     // Store elements into corresponding variables
-    deliveryModeElement = $('#delivery-mode');
-    containerTypeElement = $('#container-type');
-    quantityElement = $('#quantity');
-    swapNewElement = $('#swap-new');
     pricePerUnitElement = $('#price');
     subtotalElement = $('#subtotal');
     deliveryFeeElement = $('#delivery-fee');
@@ -43,7 +37,7 @@ $(document).ready(function () {
         updatePrices(quantity, deliveryMode, swapNew);
     });
 
-    quantityElement.change(function() {
+    $('#quantity').change(function() {
         quantity = this.value;
 
         // If user enters a negative value, reset to 0
@@ -55,36 +49,27 @@ $(document).ready(function () {
         updatePrices(quantity, deliveryMode, swapNew);
     })
 
-    deliveryModeElement.on('change', function() {
+    $('#delivery-mode').on('change', function() {
         deliveryMode = this.value;
-
-        deliveryModeElement.css('color', ORDER_TEXT_COLOR);
-
-        // console.log($('#delivery-address').disabled)
-        if (deliveryMode == 'Delivery') {
-            $('#delivery-address').prop('disabled', false);
-        } else {
-            $('#delivery-address').prop('disabled', true);
-        }
-        $('#sample-text').html(deliveryMode);
 
         updatePrices(quantity, deliveryMode, swapNew);
     });
 
-    swapNewElement.on('change', function() {
+    $('#swap-new').on('change', function() {
         swapNew = this.value;
         
-        swapNewElement.css('color', ORDER_TEXT_COLOR);
-
         updatePrices(quantity, deliveryMode, swapNew);
+    });
+  
+    // Click listener for place order button
+    placeOrderBtn.click(function() {
+        logOrderDetails();
+        // $('#place-order-form').submit();
     });
 });
 
 // Compute the prices and update on screen
 function updatePrices(quantity = 0, deliveryMode, swapNew) {
-    let pricePerUnit = 0;
-    let deliveryFee = 0;
-
     // Check if all info is provided before enabling the submit button
     if ((quantity != 0) && containerType && deliveryMode && swapNew) {
         placeOrderBtn.prop('disabled', false);
@@ -108,20 +93,22 @@ function updatePrices(quantity = 0, deliveryMode, swapNew) {
         deliveryFee = 0;
     }
 
-    console.log(`quantity: ${quantity}, container: ${containerType}, swap or buy: ${swapNew}, pickup or delivery: ${deliveryMode}`)
-
     pricePerUnitElement.val(`${formatter.format(pricePerUnit)}`);
     deliveryFeeElement.val(`${formatter.format(deliveryFee)}`);
     subtotalElement.val(`${formatter.format(pricePerUnit * quantity)}`);
     totalPriceElement.val(`${formatter.format(pricePerUnit * quantity + deliveryFee)}`);
 }
 
+function logOrderDetails() {
+    console.log(`quantity: ${quantity}, container: ${containerType}, swap or buy: ${swapNew}, pickup or delivery: ${deliveryMode}, total: ${pricePerUnit * quantity + deliveryFee}`);
+}
+
 // Prevent Enter key from submitting the form
 // This is basically preventing the Enter key from doing anything
 // Source: https://stackoverflow.com/questions/895171/prevent-users-from-submitting-a-form-by-hitting-enter#:~:text=Disallow%20enter%20key%20anywhere&text=on(%22keydown%22%2C%20%22,be%20checked%20on%20the%20key%20.
-$(document).on("keydown", ":input:not(textarea)", function(event) {
-    return event.key != "Enter";
-});
+// $(document).on("keydown", ":input:not(textarea)", function(event) {
+//     return event.key != "Enter";
+// });
 
 
 // Formatting for our currency item

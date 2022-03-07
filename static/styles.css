@@ -11,7 +11,7 @@
   --yellow: #f5b82e;
   --green: #2e944b;
   --shadow: rgb(201, 201, 201);
-  --light-gray: rgb(250, 251, 252);
+  --light-gray: rgb(248, 249, 250);
   --border-gray: rgb(216, 212, 218);
   --nav-bar-color: rgb(36, 139, 224);
 }
@@ -21,6 +21,11 @@
 body {
   font-family: 'Roboto', sans-serif !important;
   background-color: var(--light-gray);
+}
+.container-medium {
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 
@@ -43,7 +48,6 @@ nav .navbar-brand .white {
 .nav-container {
   border: none;
   background-color: var(--nav-bar-color) !important;
-  box-shadow: 0px 1px 4px 1px var(--shadow);
 }
 
 
@@ -53,7 +57,6 @@ select {
   height: 2rem;
   font-size: 1rem !important;
 }
-
 .not-bold {
   font-weight: normal !important;
 }
@@ -65,10 +68,17 @@ select {
   height: auto;
 }
 
+/* Shadow classes */
+.shadow-low {
+  box-shadow: 0px 1px 2px 1px var(--shadow);
+}
+.shadow-high {
+  box-shadow: 0px 1px 4px 3px var(--shadow);
+}
+
 .order-form {
   margin-top: 1rem;
   background-color: var(--light-gray);
-  box-shadow: 0px 2px 2px 2px var(--shadow);
   /* background-color: transparent; */
   padding: 2rem;
   border-radius: 5px;
@@ -78,7 +88,7 @@ select {
 
 /* Overriding input group text properties */
 .input-group-text {
-  font-weight: bold;
+  /* font-weight: bold; */
   background-color: transparent;
   color: black;
   border: 0;
