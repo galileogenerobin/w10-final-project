@@ -7,9 +7,10 @@ let swapNew;
 let deliveryModeElement;
 let deliveryMode;
 let pricePerUnitElement;
-let pricePerUnitText;
+let subtotalElement;
+let deliveryFeeElement;
 let totalPriceElement;
-let totalPriceText;
+let placeOrderBtn;
 const SWAP_PRICE = 20;
 const NEW_PRICE = 180;
 const DELIVERY_FEE = 10;
@@ -22,15 +23,24 @@ $(document).ready(function () {
     quantityElement = $('#quantity');
     swapNewElement = $('#swap-new');
     pricePerUnitElement = $('#price');
-    pricePerUnitText = $('#price-text');
+    subtotalElement = $('#subtotal');
+    deliveryFeeElement = $('#delivery-fee');
     totalPriceElement = $('#total');
-    totalPriceText = $('#total-text');
+    placeOrderBtn = $('#place-order');
     
     // The succeeding lines set up the event listeners for our form elements
-    containerTypeElement.on('change', function() {
-        containerType = this.value;
-        
-        containerTypeElement.css('color', ORDER_TEXT_COLOR);
+    $('#round-container-option').click(function() {
+        $('#round-container').prop('checked', true);
+        containerType = $("input[name='container-type']:checked").val();
+
+        updatePrices(quantity, deliveryMode, swapNew);
+    });
+
+    $('#slim-container-option').click(function() {
+        $('#slim-container').prop('checked', true);
+        containerType = $("input[name='container-type']:checked").val();
+
+        updatePrices(quantity, deliveryMode, swapNew);
     });
 
     quantityElement.change(function() {
@@ -71,30 +81,39 @@ $(document).ready(function () {
 });
 
 // Compute the prices and update on screen
-function updatePrices(quantity, deliveryMode, swapNew) {
+function updatePrices(quantity = 0, deliveryMode, swapNew) {
     let pricePerUnit = 0;
+    let deliveryFee = 0;
 
-    // Check if all values are filled
-    if ((!quantity) || (!deliveryMode) || (!swapNew)) {
+    // Check if all info is provided before enabling the submit button
+    if ((quantity != 0) && containerType && deliveryMode && swapNew) {
+        placeOrderBtn.prop('disabled', false);
+    } else {
+        placeOrderBtn.prop('disabled', true);
+    }
+
+    // Check if for swap container or new container
+    if (swapNew == 'Swap') {
+        pricePerUnit = SWAP_PRICE;
+    } else if (swapNew == 'New') {
+        pricePerUnit = NEW_PRICE;
+    } else {
         pricePerUnit = 0;
-        quantity = 0;
-    }
-    else{
-        // Check if for swap container or new container
-        if (swapNew == 'Swap') {
-            pricePerUnit = SWAP_PRICE;
-        } else {
-            pricePerUnit = NEW_PRICE;
-        }
-
-        // Check if for delivery
-        if (deliveryMode == 'Delivery') {
-            pricePerUnit += DELIVERY_FEE;
-        }
     }
 
-    pricePerUnitElement.val(`PhP ${pricePerUnit.toFixed(2)}`);
-    totalPriceElement.val(`PhP ${(pricePerUnit * quantity).toFixed(2)}`);
+    // Check if for delivery
+    if (deliveryMode == 'Delivery') {
+        deliveryFee = DELIVERY_FEE;
+    } else {
+        deliveryFee = 0;
+    }
+
+    console.log(`quantity: ${quantity}, container: ${containerType}, swap or buy: ${swapNew}, pickup or delivery: ${deliveryMode}`)
+
+    pricePerUnitElement.val(`${formatter.format(pricePerUnit)}`);
+    deliveryFeeElement.val(`${formatter.format(deliveryFee)}`);
+    subtotalElement.val(`${formatter.format(pricePerUnit * quantity)}`);
+    totalPriceElement.val(`${formatter.format(pricePerUnit * quantity + deliveryFee)}`);
 }
 
 // Prevent Enter key from submitting the form
@@ -102,4 +121,11 @@ function updatePrices(quantity, deliveryMode, swapNew) {
 // Source: https://stackoverflow.com/questions/895171/prevent-users-from-submitting-a-form-by-hitting-enter#:~:text=Disallow%20enter%20key%20anywhere&text=on(%22keydown%22%2C%20%22,be%20checked%20on%20the%20key%20.
 $(document).on("keydown", ":input:not(textarea)", function(event) {
     return event.key != "Enter";
+});
+
+
+// Formatting for our currency item
+var formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'PHP',
 });

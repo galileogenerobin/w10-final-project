@@ -42,7 +42,6 @@ def after_request(response):
 def index():
     return render_template("index.html")
 
-
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in"""
@@ -72,7 +71,7 @@ def login():
         session["user_id"] = rows[0]["id"]
 
         # Redirect user to home page
-        return redirect("/")
+        return redirect("/orders")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -90,27 +89,25 @@ def logout():
     return redirect("/")
 
 
-@app.route("/submit-order")
-def submit_order():
-    # Sample comment
-    """ TODO submit order"""
+@app.route("/place-order", methods=["GET", "POST"])
+def place_order():
+    """ TODO place order"""
     return redirect("/")
 
 
-@app.route("/orders")
+@app.route("/orders", methods=["GET"])
 def manage_orders():
-    # Sample comment
     """ TODO manage orders page"""
     return render_template("index.html")
 
 
-@app.route("/sales")
+@app.route("/sales", methods=["GET"])
 def manage_sales():
     """ TODO sales page"""
     return render_template("index.html")
 
 
-@app.route("/history")
+@app.route("/history", methods=["GET"])
 def order_history():
     """ TODO order history page"""
     return render_template("index.html")

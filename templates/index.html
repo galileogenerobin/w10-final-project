@@ -1,9 +1,7 @@
 {% extends "layout.html" %}
 
 {% block head %}
-<!--https://developers.google.com/maps/documentation/javascript/examples/places-searchbox#maps_places_searchbox-html-->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    <!--<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>-->
+    <!-- Script for index page -->
     <script src="/static/index.js"></script>
 {% endblock %}
 
@@ -12,76 +10,103 @@
 {% endblock %}
 
 {% block main %}
-    <div class="container">
+    <div class="container-fluid my-3">
+        
         <div class="row">
             <!-- We use Bootstrap's grid system to center our order form on the screen by assigning column classes (12-column grid) -->
             <div class="col-sm-3"></div>
-            
-            <div class="col-sm-6 order-form">
-                <h1 class="mb-4 fw-bold">Order Now</h1>
 
-                <form action="/submit-order" method="post">
-                    <!-- We use Bootstrap's "input-group" to group each line in our input form -->
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">Quantity (containers):</span>
-                        <input class="form-control text-end input-group-entry" type="number" id="quantity" name="quantity" min="0" placeholder="">
-                    </div>
+            <div class="col-sm-6">
+                <div class="order-form">
+                    <h1 class="mb-5 fw-bold">Order Form</h1>
 
-                    <!-- TODO change the succeeding select elements to radio buttons -->
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">Select container type:</span>
-                        <select class="form-select no-selection text-end input-group-entry" id="container-type" name="container-type">
-                            <option selected disabled>Select option</option>
-                            <option value="round-container">Round container</option>
-                            <option value="slim-container">Slim container</option>
-                        </select>
-                    </div>
+                    <form action="/place-order" method="post">
+                        <div class="mb-2">
+                            <label class="form-label text-start fw-bold" for="quantity">Quantity (containers):</label>
+                            <input class="form-control text-end input-group-entry" type="number" id="quantity" name="quantity" min="0" placeholder="">
+                        </div>
+                        
+                        <!-- For container type, we're using radio buttons with images (by grouping them together in a div container) -->
+                        <!-- We added a click listener to the container so that the user can just click anywhere inside the container to select the radio option -->
+                        <div class="mb-2">
+                            <label for="container-type" class="form-label text-start fw-bold">Container type:</label>
+                            <br>
+                            <div class="position-relative row">
+                                <div class="form-check-image-group col mx-2" id="round-container-option">
+                                    <img class="form-check-image text-center position-relative start-50 translate-middle-x mb-2" src="/static/round-container.jpg" width="150" height="150">
+                                    <div class="form-check text-center">
+                                        <input class="form-check-input" type="radio" id="round-container" value="round-container" name="container-type">
+                                        <label for="round-container" class="form-check-label">Round container</label>
+                                    </div>
+                                </div>
+                                <div class="form-check-image-group col mx-2" id="slim-container-option">
+                                    <img class="form-check-image position-relative start-50 translate-middle-x mb-2" src="/static/slim-container.jpg" width="150" height="150">
+                                    <div class="form-check text-center">
+                                        <input class="form-check-input" type="radio" id="slim-container" value="slim-container" name="container-type">
+                                        <label for="slim-container" class="form-check-label">Slim container</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-2">
+                            <label class="form-label text-start fw-bold" for="swap-new" >Swap or buy new:</label>
+                            <select class="form-select w-100 no-selection text-end input-group-entry" id="swap-new" name="swap-new">
+                                <option selected disabled>Select option</option>
+                                <option value="Swap">Swap container</option>
+                                <option value="New">Buy new container</option>
+                            </select>
+                        </div>
 
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">Swap or buy new:</span>
-                        <select class="form-select no-selection text-end input-group-entry" id="swap-new" name="new-container">
-                            <option selected disabled>Select option</option>
-                            <option value="Swap">Swap container</option>
-                            <option value="New">Buy new container</option>
-                        </select>
-                    </div>
+                        <div class="input-group">
+                            <span class="input-group-text">Price per unit:</span>
+                            <input class="form-control text-end form-read-only input-group-entry" disabled type="text" id="price" name="price" value="-">
+                        </div>
 
-                    <div class="input-group mb-5">
-                        <span class="input-group-text">Pick up or delivery:</span>
-                        <select class="form-select no-selection text-end input-group-entry" id="delivery-mode" name="delivery-mode">
-                            <option selected disabled>Select option</option>
-                            <option value="Pick up">Pick up</option>
-                            <option value="Delivery">Delivery</option>
-                        </select>            
-                    </div>
+                        <div class="input-group mb-4">
+                            <span class="input-group-text">Subtotal:</span>
+                            <input class="form-control text-end form-read-only input-group-entry" disabled type="text" id="subtotal" name="subtotal" value="-">
+                        </div>
 
-                    <div class="input-group">
-                        <span class="input-group-text">Price per unit:</span>
-                        <input class="form-control text-end form-read-only input-group-entry" disabled type="text" id="price" name="price" value="PhP 0.00">
-                    </div>
+                        <div class="mb-2">
+                            <label class="form-label text-start fw-bold" for="delivery-mode" >Pick up or delivery:</label>
+                            <select class="form-select w-100 no-selection text-end input-group-entry" id="delivery-mode" name="delivery-mode">
+                                <option selected disabled>Select option</option>
+                                <option value="Pick up">Pick up</option>
+                                <option value="Delivery">Delivery</option>
+                            </select>            
+                        </div>
 
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">Total price:</span>
-                        <input class="form-control text-end form-read-only fw-bold input-group-entry" disabled type="text" id="total" name="total" value="PhP 0.00">
-                    </div>
-                    
-                    <div class="row">
-                        <span class="col-3"></span>
-                        <button class="btn btn-primary col-6" type="submit">Place order</button>
-                        <span class="col-3"></span>
-                    </div>
-                    
-                </form>
+                        <div class="input-group">
+                            <span class="input-group-text mb-4">Delivery fee:</span>
+                            <input class="form-control text-end form-read-only input-group-entry" disabled type="text" id="delivery-fee" name="delivery-fee" value="-">
+                        </div>
 
+                        <hr>
+
+                        <div class="input-group mb-4">
+                            <span class="input-group-text">Total price:</span>
+                            <input class="form-control text-end form-read-only fw-bold input-group-entry" disabled type="text" id="total" name="total" value="-">
+                        </div>
+                        
+                        <div class="row">
+                            <span class="col-3"></span>
+                            <button class="btn btn-primary col-6" disabled id="place-order" type="submit">Place order</button>
+                            <span class="col-3"></span>
+                        </div>
+                        
+                    </form>
+
+                </div>
             </div>
-            <div class="col-sm-3"></div>
-        </div>
 
-        <!--
-        -   Choose between round containers or slim containers (ok)
-        -   Input quantity (ok)
-        -   Show price per unit and total price for given quantity (ok)
-        -   Select if for pickup or for delivery (ok)
-        -   If for delivery, request for address and add option to schedule delivery or deliver immediately; Delivery to be handled in another page-->
+            <div class="col-sm-3"></div>
+            <!--
+            -   Choose between round containers or slim containers (ok)
+            -   Input quantity (ok)
+            -   Show price per unit and total price for given quantity (ok)
+            -   Select if for pickup or for delivery (ok)
+            -   If for delivery, request for address and add option to schedule delivery or deliver immediately; Delivery to be handled in another page-->
+        </div>
     </div>
 {% endblock %}
