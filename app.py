@@ -17,7 +17,7 @@ app = Flask(__name__)
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
-# Custom filter
+# Reformat input subjected to filter "php" (filter used will be the 'php' function in our helper file)
 app.jinja_env.filters["php"] = php
 
 # Configure session to use filesystem (instead of signed cookies)
@@ -28,6 +28,7 @@ Session(app)
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///water-oms.db")
 
+peso_symbol = u'\u20b1'
 
 @app.after_request
 def after_request(response):
@@ -42,7 +43,6 @@ def after_request(response):
 def index():
     return render_template("index.html")
 
-
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in"""
@@ -55,11 +55,11 @@ def login():
 
         # Ensure username was submitted
         if not request.form.get("username"):
-            return apology("must provide username", 403)
+            return apology("must provide username", 400)
 
         # Ensure password was submitted
         elif not request.form.get("password"):
-            return apology("must provide password", 403)
+            return apology("must provide password", 400)
 
         # Query database for username
         rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
@@ -72,7 +72,7 @@ def login():
         session["user_id"] = rows[0]["id"]
 
         # Redirect user to home page
-        return redirect("/")
+        return redirect("/orders")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -90,27 +90,42 @@ def logout():
     return redirect("/")
 
 
-@app.route("/submit-order")
-def submit_order():
-    # Sample comment
-    """ TODO submit order"""
-    return redirect("/")
+@app.route("/review-order", methods=["GET", "POST"])
+def review_order():
+    """ TODO review order"""
+    # If HTML POST request
+    if request.method == "POST":
+        container_type = request.form.get("container-type")
+        quantity = int(request.form.get("quantity"))
+        swap_new = request.form.get("swap-new")
+        delivery_mode = request.form.get("delivery-mode")
+        # We need to take out the Peso symbol from the data we received from the form
+        price_per_unit = float(request.form.get("price").replace(peso_symbol, ""))
+        delivery_fee = float(request.form.get("delivery-fee").replace(peso_symbol, ""))
 
+        # Convert container_type to presentation format
+        container_type = "Round Container" if container_type == "round-container" else "Slim Container"
 
-@app.route("/orders")
+        return render_template("review-order.html",
+            container_type=container_type, quantity=quantity, swap_new=swap_new, price_per_unit=price_per_unit, delivery_mode=delivery_mode, delivery_fee=delivery_fee)
+    
+    # If GET request
+    else:
+        return redirect("/")
+
+@app.route("/orders", methods=["GET"])
 def manage_orders():
-    # Sample comment
     """ TODO manage orders page"""
     return render_template("index.html")
 
 
-@app.route("/sales")
+@app.route("/sales", methods=["GET"])
 def manage_sales():
     """ TODO sales page"""
     return render_template("index.html")
 
 
-@app.route("/history")
+@app.route("/history", methods=["GET"])
 def order_history():
     """ TODO order history page"""
     return render_template("index.html")
