@@ -22,6 +22,13 @@ $(document).ready(function () {
     totalPriceElement = $('#total');
     placeOrderBtn = $('#place-order');
     
+    // Refresh form values on load (useful when a user returns to the page via Back button or some other means where data is retained)
+    containerType = $("input[name='container-type']:checked").val();
+    quantity = $('#quantity').val();
+    deliveryMode = $('#delivery-mode').val();
+    swapNew = $('#swap-new').val();
+    updatePrices(quantity, deliveryMode, swapNew);
+
     // The succeeding lines set up the event listeners for our form elements
     $('#round-container-option').click(function() {
         $('#round-container').prop('checked', true);
@@ -64,7 +71,7 @@ $(document).ready(function () {
     // Click listener for place order button
     placeOrderBtn.click(function() {
         logOrderDetails();
-        // $('#place-order-form').submit();
+        $('#place-order-form').submit();
     });
 });
 
@@ -100,7 +107,7 @@ function updatePrices(quantity = 0, deliveryMode, swapNew) {
 }
 
 function logOrderDetails() {
-    console.log(`quantity: ${quantity}, container: ${containerType}, swap or buy: ${swapNew}, pickup or delivery: ${deliveryMode}, total: ${pricePerUnit * quantity + deliveryFee}`);
+    console.log(`container: ${containerType}, quantity: ${quantity}, swap or buy: ${swapNew}, pickup or delivery: ${deliveryMode}, total: ${pricePerUnit * quantity + deliveryFee}`);
 }
 
 // Prevent Enter key from submitting the form

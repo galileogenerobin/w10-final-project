@@ -19,10 +19,10 @@
                         <div class="position-relative m-4">
                             <!-- TODO: move styling to css file -->
                             <div class="progress" style="height: 1px;">
-                                <div class="progress-bar" role="progressbar" style="width: 50%; background-color: var(--blue);"></div>
+                                <div class="progress-bar" role="progressbar" style="width: 0%; background-color: var(--blue);"></div>
                             </div>
                             <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 2rem; height:2rem; background-color:white; border: 3px solid var(--blue);"></button>
-                            <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 2rem; height:2rem;"></button>
+                            <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem;"></button>
                             <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem;"></button>
                         </div>
                         TODO progress bar
@@ -31,12 +31,12 @@
 
                 <div class="row mx-0">
                     <div class="order-form">
-                        <h2 class="mb-4 fw-bold">Order Form</h2>
+                        <h2 class="mb-3 fw-bold">Order Form</h2>
 
-                        <form id="place-order-form" action="/place-order" method="post">
+                        <form id="place-order-form" action="/review-order" method="post">
                             <!-- For container type, we're using radio buttons with images (by grouping them together in a div container) -->
                             <!-- We added a click listener to the container so that the user can just click anywhere inside the container to select the radio option -->
-                            <div class="mb-2">
+                            <div class="mb-0">
                                 <label for="container-type" class="form-label text-start">Container type:</label>
                                 <br>
                                 <div class="row">
@@ -57,7 +57,7 @@
                                 </div>
                             </div>
 
-                            <div class="mb-3">
+                            <div class="mb-2">
                                 <label class="form-label text-start" for="quantity">Quantity (containers):</label>
                                 <input class="form-control text-end input-group-entry" type="number" id="quantity" name="quantity" min="0" placeholder="">
                             </div>
@@ -73,12 +73,12 @@
 
                             <div class="input-group">
                                 <span class="input-group-text">Price per unit:</span>
-                                <input class="form-control text-end form-read-only" disabled type="text" id="price" name="price" value="-">
+                                <input class="form-control text-end form-read-only" read-only type="text" id="price" name="price" value="-">
                             </div>
 
-                            <div class="input-group mb-4">
+                            <div class="input-group mb-3">
                                 <span class="input-group-text">Subtotal:</span>
-                                <input class="form-control text-end form-read-only fw-bold" disabled type="text" id="subtotal" name="subtotal" value="-">
+                                <input class="form-control text-end form-read-only fw-bold" read-only  type="text" id="subtotal" name="subtotal" value="-">
                             </div>
 
                             <div class="mb-2">
@@ -90,24 +90,22 @@
                                 </select>            
                             </div>
 
-                            <div class="input-group">
-                                <span class="input-group-text mb-4">Delivery fee:</span>
-                                <input class="form-control text-end form-read-only" disabled type="text" id="delivery-fee" name="delivery-fee" value="-">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Delivery fee:</span>
+                                <input class="form-control text-end form-read-only" read-only type="text" id="delivery-fee" name="delivery-fee" value="-">
                             </div>
 
                             <hr>
 
                             <div class="input-group">
                                 <span class="input-group-text fs-3">Total price:</span>
-                                <input class="form-control text-end form-read-only fw-bold fs-3" disabled type="text" id="total" name="total" value="-">
+                                <input class="form-control text-end form-read-only fw-bold fs-3" read-only  type="text" id="total" name="total" value="-">
                             </div>
                             
-                            <hr class="mb-5 ">
+                            <hr class="mb-4">
 
                             <div class="row">
-                                <span class="col-3"></span>
-                                <button class="btn btn-primary col-6" disabled id="place-order" type="button">Place order</button>
-                                <span class="col-3"></span>
+                                <button class="btn btn-primary" disabled id="place-order" type="button">Place order</button>
                             </div>
                             
                         </form>

@@ -17,6 +17,9 @@ app = Flask(__name__)
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
+# Reformat input subjected to filter "php" (filter used will be the 'php' function in our helper file)
+app.jinja_env.filters["php"] = php
+
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
@@ -25,6 +28,7 @@ Session(app)
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///water-oms.db")
 
+peso_symbol = u'\u20b1'
 
 @app.after_request
 def after_request(response):
@@ -86,11 +90,28 @@ def logout():
     return redirect("/")
 
 
-@app.route("/place-order", methods=["GET", "POST"])
-def place_order():
-    """ TODO place order"""
-    return redirect("/")
+@app.route("/review-order", methods=["GET", "POST"])
+def review_order():
+    """ TODO review order"""
+    # If HTML POST request
+    if request.method == "POST":
+        container_type = request.form.get("container-type")
+        quantity = int(request.form.get("quantity"))
+        swap_new = request.form.get("swap-new")
+        delivery_mode = request.form.get("delivery-mode")
+        # We need to take out the Peso symbol from the data we received from the form
+        price_per_unit = float(request.form.get("price").replace(peso_symbol, ""))
+        delivery_fee = float(request.form.get("delivery-fee").replace(peso_symbol, ""))
 
+        # Convert container_type to presentation format
+        container_type = "Round Container" if container_type == "round-container" else "Slim Container"
+
+        return render_template("review-order.html",
+            container_type=container_type, quantity=quantity, swap_new=swap_new, price_per_unit=price_per_unit, delivery_mode=delivery_mode, delivery_fee=delivery_fee)
+    
+    # If GET request
+    else:
+        return redirect("/")
 
 @app.route("/orders", methods=["GET"])
 def manage_orders():

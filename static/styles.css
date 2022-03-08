@@ -24,10 +24,18 @@ body {
 }
 .container-medium {
   max-width: 720px;
+  padding-left: 16px;
+  padding-right: 16px;
   margin-left: auto;
   margin-right: auto;
 }
-
+.container-small {
+  max-width: 480px;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 /* Styling for navigation bar */
 /* Size for brand */
@@ -80,7 +88,8 @@ select {
   margin-top: 1rem;
   background-color: var(--light-gray);
   /* background-color: transparent; */
-  padding: 2rem;
+  padding-top: 16px;
+  padding-bottom: 16px;
   border-radius: 5px;
   position: relative;
   color: var(--blue);
@@ -91,13 +100,16 @@ select {
   /* font-weight: bold; */
   background-color: transparent;
   color: black;
-  border: 0;
+  border: none;
   margin-right: 1rem;
   /* border-radius: 10px !important; */
 }
 /* Creating a new class for an input group entry*/
 .input-group-entry {
   border-radius: 10px !important;
+}
+.input-group-border {
+  border: 1px solid var(--border-gray);
 }
 
 
@@ -150,12 +162,12 @@ select {
   font-weight: bold;
 }
 .btn-primary {
-  background-color: var(--blue);
-  border-color: var(--blue);
+  background-color: var(--blue) !important;
+  border-color: var(--blue) !important;
 }
 .btn-primary:hover {
-  background-color: var(--dark-blue);
-  border-color: var(--dark-blue);
+  background-color: var(--dark-blue) !important;
+  border-color: var(--dark-blue) !important;
 }
 
 /* If we want to hide something; not used yet */

@@ -33,7 +33,9 @@ def login_required(f):
 
 def php(value):
     """Format value as PhP."""
-    return f"PhP {value:,.2f}"
+    PESO_SYMBOL = u'\u20b1'
+
+    return f"{PESO_SYMBOL} {value:,.2f}"
 
 
 def check_if_int(str):

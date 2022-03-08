@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<script src="/static/review-order.js"></script>
+{% endblock %}
+
+{% block title %}
+Review Order
+{% endblock %}
+
+{% block main %}
+<div class="container-small">
+    <div class="mx-0">
+        <div class="row mx-0">
+            <div class="mx-auto mt-4">
+                <div class="position-relative m-4">
+                    <!-- TODO: move styling to css file -->
+                    <div class="progress" style="height: 1px;">
+                        <div class="progress-bar" role="progressbar" style="width: 50%; background-color: var(--blue);"></div>
+                    </div>
+                    <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 2rem; height:2rem; background-color:white; border: 3px solid var(--blue);"></button>
+                    <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 2rem; height:2rem;"></button>
+                    <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem;"></button>
+                </div>
+                TODO progress bar
+            </div>
+        </div>
+
+        <h3 class="my-3">Review order details</h3>
+        <form id="submit-order-form" action="submit-order" method="post">
+            <input class="form-control form-read-only text-end text-muted" read-only  type="hidden" name="container-type" value="{{ container_type }}">
+            <input class="form-control form-read-only text-end text-muted" read-only  type="hidden" name="quantity" value="{{ quantity }}">
+            <input class="form-control form-read-only text-end text-muted" read-only  type="hidden" name="swap-new" value="{{ swap_new }}">
+            <input class="form-control form-read-only text-end text-muted" read-only  type="hidden" name="price" value="{{ price_per_unit }}">
+            <input class="form-control form-read-only text-end text-muted" read-only  type="hidden" name="delivery-mode" value="{{ delivery_mode }}">
+            <input class="form-control form-read-only text-end text-muted" read-only  type="hidden" name="delivery-fee" value="{{ delivery_fee }}">
+        </form>
+        <div class="row my-3 fs-6">
+            <div class="col-6 fw-bold mb-3">
+                <div>Container Type</div>
+                <div>Quantity</div>
+                <div>Swap or New</div>
+            </div>
+            <div class="col-6 text-muted mb-3 text-end">
+                <div>{{ container_type }}</div>
+                <div>{{ quantity }}</div>
+                <div>{{ swap_new }}</div>
+            </div>
+            <hr>
+            <div class="col-6 fw-bold mb-3">
+                <div>Subtotal</div>
+                <div>Delivery fee</div>
+            </div>
+            <div class="col-6 text-muted text-end mb-3">
+                <div class="fw-bold">{{ (price_per_unit * quantity) | php }}</div>
+                <div>{{ delivery_fee | php }}</div>
+            </div>
+            <hr>
+            <div class="col-6 fw-bold fs-5">Total</div>
+            <div class="col-6 text-end fw-bold fs-5">{{ (price_per_unit * quantity + delivery_fee) | php }}</div>
+        </div>
+        <div class="row px-2">
+            <button class="btn btn-primary mt-2" id="submit-order" type="button">Confirm order</button>
+            <button class="btn btn-secondary mt-2" id="edit-order" type="button">Back</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
