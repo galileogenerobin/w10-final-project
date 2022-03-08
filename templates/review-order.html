@@ -27,13 +27,14 @@ Review Order
         </div>
 
         <h3 class="my-3">Review order details</h3>
+        <!--We will store the order data in a form that will be hidden so we can submit in a POST request-->
         <form id="submit-order-form" action="submit-order" method="post">
-            <input class="form-control form-read-only text-end text-muted" read-only  type="hidden" name="container-type" value="{{ container_type }}">
-            <input class="form-control form-read-only text-end text-muted" read-only  type="hidden" name="quantity" value="{{ quantity }}">
-            <input class="form-control form-read-only text-end text-muted" read-only  type="hidden" name="swap-new" value="{{ swap_new }}">
-            <input class="form-control form-read-only text-end text-muted" read-only  type="hidden" name="price" value="{{ price_per_unit }}">
-            <input class="form-control form-read-only text-end text-muted" read-only  type="hidden" name="delivery-mode" value="{{ delivery_mode }}">
-            <input class="form-control form-read-only text-end text-muted" read-only  type="hidden" name="delivery-fee" value="{{ delivery_fee }}">
+            <input class="form-control form-read-only text-end text-muted" type="hidden" name="container-type" value="{{ container_type }}">
+            <input class="form-control form-read-only text-end text-muted" type="hidden" name="quantity" value="{{ quantity }}">
+            <input class="form-control form-read-only text-end text-muted" type="hidden" name="swap-new" value="{{ swap_new }}">
+            <input class="form-control form-read-only text-end text-muted" type="hidden" name="price" value="{{ price_per_unit }}">
+            <input class="form-control form-read-only text-end text-muted" type="hidden" name="delivery-mode" value="{{ delivery_mode }}">
+            <input class="form-control form-read-only text-end text-muted" type="hidden" name="delivery-fee" value="{{ delivery_fee }}">
         </form>
         <div class="row my-3 fs-6">
             <div class="col-6 fw-bold mb-3">
