@@ -1,7 +1,7 @@
 import os
 
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, url_for, request, session
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -86,14 +86,33 @@ def submit_order():
         delivery_fee = float(request.form.get("delivery-fee"))
         time_stamp = datetime.now()
 
-        db.execute(
+        # result will store the id of the newly inserted row
+        result = db.execute(
             "INSERT INTO orders (container_type, quantity, swap_or_new, price_per_unit, delivery_mode, delivery_fee, txn_timestamp) VALUES (?, ?, ?, ?, ?, ?, ?)", 
             container_type, quantity, swap_or_new, price_per_unit, delivery_mode, delivery_fee, time_stamp)
 
-        # TODO: update
-        return redirect("/")
+        # if order placed successfully
+        if result:
+            ref_number = f"{result:06d}"
+            # return render_template("order-confirmation.html", ref_number=ref_number)
+            
+            # Using 'Post-Redirect-Get' design pattern, we will redirect to another route with a get request that will display the confirmation page
+            # Previously (see commented return line above), if we just render a template directly, the form data is still in memory ...
+            # and refreshing the page will reperform the POST action
+            return redirect(url_for("order_confirmation", ref_number=ref_number))
+            
+        # otherwise
+        # TODO: apologize for the error
+        return ("/place-order")
+
     else:
         return redirect("/place-order")
+
+
+@app.route("/order-confirmation")
+def order_confirmation():
+    ref_number = request.args.get('ref_number')
+    return render_template("order-confirmation.html", ref_number=ref_number)
 
 
 @app.route("/login", methods=["GET", "POST"])

@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block title %}
+Order Confirmation
+{% endblock %}
+
+{% block main %}
+<div class="container-medium">
+    <div class="mx-0">
+        <div class="row mx-0">
+            <div class="mx-auto mt-4">
+                <div class="position-relative m-4">
+                    <!-- TODO: move styling to css file -->
+                    <div class="progress" style="height: 1px;">
+                        <div class="progress-bar" role="progressbar" style="width: 100%; background-color: var(--blue);"></div>
+                    </div>
+                    <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 2rem; height:2rem; background-color:white; border: 3px solid var(--blue);"></button>
+                    <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 2rem; height:2rem;"></button>
+                    <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 2rem; height:2rem;"></button>
+                </div>
+                TODO progress bar
+            </div>
+        </div>
+
+        <div class="text-center">
+            <h3 class="my-3">Your order is confirmed!</h3>
+            <div>Your order reference number is {{ ref_number }}.</div>
+            <!--We will store the order data in a form that will be hidden so we can submit in a POST request-->
+            <div class="row mt-2">
+                <a href="/"><button class="btn btn-primary mt-2" id="submit-order" type="button">Back to Home</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

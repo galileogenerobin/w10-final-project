@@ -70,7 +70,7 @@ $(document).ready(function () {
   
     // Click listener for place order button
     placeOrderBtn.click(function() {
-        logOrderDetails();
+        // logOrderDetails();
         $('#place-order-form').submit();
     });
 });
@@ -100,7 +100,7 @@ function updatePrices(quantity = 0, deliveryMode, swapOrNew) {
         deliveryFee = 0;
     }
 
-    logOrderDetails();
+    // logOrderDetails();
 
     pricePerUnitElement.val(`${formatter.format(pricePerUnit)}`);
     deliveryFeeElement.val(`${formatter.format(deliveryFee)}`);
