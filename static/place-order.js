@@ -1,6 +1,6 @@
 let containerType;
 let quantity;
-let swapNew;
+let swapOrNew;
 let deliveryMode;
 let pricePerUnit = 0;
 let deliveryFee = 0;
@@ -26,22 +26,22 @@ $(document).ready(function () {
     containerType = $("input[name='container-type']:checked").val();
     quantity = $('#quantity').val();
     deliveryMode = $('#delivery-mode').val();
-    swapNew = $('#swap-new').val();
-    updatePrices(quantity, deliveryMode, swapNew);
+    swapOrNew = $('#swap-or-new').val();
+    updatePrices(quantity, deliveryMode, swapOrNew);
 
     // The succeeding lines set up the event listeners for our form elements
     $('#round-container-option').click(function() {
         $('#round-container').prop('checked', true);
         containerType = $("input[name='container-type']:checked").val();
 
-        updatePrices(quantity, deliveryMode, swapNew);
+        updatePrices(quantity, deliveryMode, swapOrNew);
     });
 
     $('#slim-container-option').click(function() {
         $('#slim-container').prop('checked', true);
         containerType = $("input[name='container-type']:checked").val();
 
-        updatePrices(quantity, deliveryMode, swapNew);
+        updatePrices(quantity, deliveryMode, swapOrNew);
     });
 
     $('#quantity').change(function() {
@@ -53,19 +53,19 @@ $(document).ready(function () {
             quantity = this.value;
         }
 
-        updatePrices(quantity, deliveryMode, swapNew);
+        updatePrices(quantity, deliveryMode, swapOrNew);
     })
 
     $('#delivery-mode').on('change', function() {
         deliveryMode = this.value;
 
-        updatePrices(quantity, deliveryMode, swapNew);
+        updatePrices(quantity, deliveryMode, swapOrNew);
     });
 
-    $('#swap-new').on('change', function() {
-        swapNew = this.value;
+    $('#swap-or-new').on('change', function() {
+        swapOrNew = this.value;
         
-        updatePrices(quantity, deliveryMode, swapNew);
+        updatePrices(quantity, deliveryMode, swapOrNew);
     });
   
     // Click listener for place order button
@@ -76,18 +76,18 @@ $(document).ready(function () {
 });
 
 // Compute the prices and update on screen
-function updatePrices(quantity = 0, deliveryMode, swapNew) {
+function updatePrices(quantity = 0, deliveryMode, swapOrNew) {
     // Check if all info is provided before enabling the submit button
-    if ((quantity != 0) && containerType && deliveryMode && swapNew) {
+    if ((quantity != 0) && containerType && deliveryMode && swapOrNew) {
         placeOrderBtn.prop('disabled', false);
     } else {
         placeOrderBtn.prop('disabled', true);
     }
 
     // Check if for swap container or new container
-    if (swapNew == 'Swap') {
+    if (swapOrNew == 'Swap') {
         pricePerUnit = SWAP_PRICE;
-    } else if (swapNew == 'New') {
+    } else if (swapOrNew == 'New') {
         pricePerUnit = NEW_PRICE;
     } else {
         pricePerUnit = 0;
@@ -100,6 +100,8 @@ function updatePrices(quantity = 0, deliveryMode, swapNew) {
         deliveryFee = 0;
     }
 
+    logOrderDetails();
+
     pricePerUnitElement.val(`${formatter.format(pricePerUnit)}`);
     deliveryFeeElement.val(`${formatter.format(deliveryFee)}`);
     subtotalElement.val(`${formatter.format(pricePerUnit * quantity)}`);
@@ -107,7 +109,7 @@ function updatePrices(quantity = 0, deliveryMode, swapNew) {
 }
 
 function logOrderDetails() {
-    console.log(`container: ${containerType}, quantity: ${quantity}, swap or buy: ${swapNew}, pickup or delivery: ${deliveryMode}, total: ${pricePerUnit * quantity + deliveryFee}`);
+    console.log(`container: ${containerType}, quantity: ${quantity}, swap or buy: ${swapOrNew}, pickup or delivery: ${deliveryMode}, total: ${pricePerUnit * quantity + deliveryFee}`);
 }
 
 // Prevent Enter key from submitting the form

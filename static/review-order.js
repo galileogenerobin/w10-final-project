@@ -5,4 +5,8 @@ $(document).ready(function() {
         history.back();
     });
 
+    // Click handler for the confirm order button
+    $('#submit-order').click(function() {
+        $('#submit-order-form').submit();
+    })
 });

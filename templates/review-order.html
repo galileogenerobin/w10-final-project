@@ -28,10 +28,10 @@ Review Order
 
         <h3 class="my-3">Review order details</h3>
         <!--We will store the order data in a form that will be hidden so we can submit in a POST request-->
-        <form id="submit-order-form" action="submit-order" method="post">
+        <form id="submit-order-form" action="/submit-order" method="post">
             <input class="form-control form-read-only text-end text-muted" type="hidden" name="container-type" value="{{ container_type }}">
             <input class="form-control form-read-only text-end text-muted" type="hidden" name="quantity" value="{{ quantity }}">
-            <input class="form-control form-read-only text-end text-muted" type="hidden" name="swap-new" value="{{ swap_new }}">
+            <input class="form-control form-read-only text-end text-muted" type="hidden" name="swap-or-new" value="{{ swap_or_new }}">
             <input class="form-control form-read-only text-end text-muted" type="hidden" name="price" value="{{ price_per_unit }}">
             <input class="form-control form-read-only text-end text-muted" type="hidden" name="delivery-mode" value="{{ delivery_mode }}">
             <input class="form-control form-read-only text-end text-muted" type="hidden" name="delivery-fee" value="{{ delivery_fee }}">
@@ -45,7 +45,7 @@ Review Order
             <div class="col-6 text-muted mb-3 text-end">
                 <div>{{ container_type }}</div>
                 <div>{{ quantity }}</div>
-                <div>{{ swap_new }}</div>
+                <div>{{ swap_or_new }}</div>
             </div>
             <hr>
             <div class="col-6 fw-bold mb-3">
