@@ -9,7 +9,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from helpers import apology, login_required, php, check_if_int
 
 # For date and time stamp
-from datetime import datetime
+from datetime import date, datetime
 
 # Configure application
 app = Flask(__name__)
@@ -28,7 +28,9 @@ Session(app)
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///water-oms.db")
 
+# Note: did not use constant (i.e. ALL CAPS variable names) because flask auto imports to the helpers.py file and it causes an error
 peso_symbol = u'\u20b1'
+
 
 @app.after_request
 def after_request(response):
@@ -42,6 +44,57 @@ def after_request(response):
 @app.route("/")
 def index():
     return render_template("index.html")
+
+
+@app.route("/place-order")
+def place_order():
+    return render_template("place-order.html")
+
+
+@app.route("/review-order", methods=["GET", "POST"])
+def review_order():
+    """ TODO review order"""
+    # If HTML POST request
+    if request.method == "POST":
+        container_type = request.form.get("container-type")
+        quantity = int(request.form.get("quantity"))
+        swap_or_new = request.form.get("swap-or-new")
+        delivery_mode = request.form.get("delivery-mode")
+        # We need to take out the Peso symbol from the data we received from the form
+        price_per_unit = float(request.form.get("price").replace(peso_symbol, ""))
+        delivery_fee = float(request.form.get("delivery-fee").replace(peso_symbol, ""))
+
+        # Convert container_type to presentation format
+        container_type = "Round Container" if container_type == "round-container" else "Slim Container"
+
+        return render_template("review-order.html",
+            container_type=container_type, quantity=quantity, swap_or_new=swap_or_new, price_per_unit=price_per_unit, delivery_mode=delivery_mode, delivery_fee=delivery_fee)
+    
+    # If GET request
+    else:
+        return redirect("/place-order")
+
+
+@app.route("/submit-order", methods=["GET", "POST"])
+def submit_order():
+    if request.method == "POST":
+        container_type = request.form.get("container-type")
+        quantity = int(request.form.get("quantity"))
+        swap_or_new = request.form.get("swap-or-new")
+        price_per_unit = float(request.form.get("price"))
+        delivery_mode = request.form.get("delivery-mode")
+        delivery_fee = float(request.form.get("delivery-fee"))
+        time_stamp = datetime.now()
+
+        db.execute(
+            "INSERT INTO orders (container_type, quantity, swap_or_new, price_per_unit, delivery_mode, delivery_fee, txn_timestamp) VALUES (?, ?, ?, ?, ?, ?, ?)", 
+            container_type, quantity, swap_or_new, price_per_unit, delivery_mode, delivery_fee, time_stamp)
+
+        # TODO: update
+        return redirect("/")
+    else:
+        return redirect("/place-order")
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -72,7 +125,7 @@ def login():
         session["user_id"] = rows[0]["id"]
 
         # Redirect user to home page
-        return redirect("/orders")
+        return redirect("/manage-orders")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -90,42 +143,22 @@ def logout():
     return redirect("/")
 
 
-@app.route("/review-order", methods=["GET", "POST"])
-def review_order():
-    """ TODO review order"""
-    # If HTML POST request
-    if request.method == "POST":
-        container_type = request.form.get("container-type")
-        quantity = int(request.form.get("quantity"))
-        swap_new = request.form.get("swap-new")
-        delivery_mode = request.form.get("delivery-mode")
-        # We need to take out the Peso symbol from the data we received from the form
-        price_per_unit = float(request.form.get("price").replace(peso_symbol, ""))
-        delivery_fee = float(request.form.get("delivery-fee").replace(peso_symbol, ""))
-
-        # Convert container_type to presentation format
-        container_type = "Round Container" if container_type == "round-container" else "Slim Container"
-
-        return render_template("review-order.html",
-            container_type=container_type, quantity=quantity, swap_new=swap_new, price_per_unit=price_per_unit, delivery_mode=delivery_mode, delivery_fee=delivery_fee)
-    
-    # If GET request
-    else:
-        return redirect("/")
-
-@app.route("/orders", methods=["GET"])
+@app.route("/manage-orders", methods=["GET"])
+@login_required
 def manage_orders():
     """ TODO manage orders page"""
     return render_template("index.html")
 
 
 @app.route("/sales", methods=["GET"])
+@login_required
 def manage_sales():
     """ TODO sales page"""
     return render_template("index.html")
 
 
 @app.route("/history", methods=["GET"])
+@login_required
 def order_history():
     """ TODO order history page"""
     return render_template("index.html")
