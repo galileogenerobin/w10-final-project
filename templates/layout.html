@@ -26,6 +26,8 @@
 
         <title>Water OMS: {% block title %}{% endblock %}</title>
 
+        <!-- Shared JavaScript files -->
+        <script src="/static/site-buttons.js"></script>
     </head>
 
     <body>
@@ -40,16 +42,20 @@
                 <div class="collapse navbar-collapse" id="navbar">
                     {% if session["user_id"] %}
                         <ul class="navbar-nav me-auto mt-2">
-                            <li class="nav-item"><a class="nav-link" href="/orders">Manage Orders</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/history">Order History</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/sales">Sales</a></li>
+                            <li class="nav-item mx-2"><a class="nav-link" href="/manage-orders">Manage Orders</a></li>
+                            <li class="nav-item mx-2"><a class="nav-link" href="/history">Order History</a></li>
+                            <li class="nav-item mx-2"><a class="nav-link" href="/sales">Sales</a></li>
                         </ul>
                         <ul class="navbar-nav ms-auto mt-2">
-                            <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
+                            <li class="nav-item mx-2"><a class="nav-link" href="/logout">Log Out</a></li>
                         </ul>
                     {% else %}
+                        <ul class="navbar-nav me-auto mt-2">
+                            <li class="nav-item mx-2"><a class="nav-link" href="/place-order">Order Now</a></li>
+                            <li class="nav-item mx-2"><a class="nav-link" href="/order-status">Check Order Status</a></li>
+                        </ul>
                         <ul class="navbar-nav ms-auto mt-2">
-                            <li class="nav-item"><a class="nav-link" href="/login">Admin Log In</a></li>
+                            <li class="nav-item mx-2"><a class="nav-link" href="/login">Admin Log In</a></li>
                         </ul>
                     {% endif %}
                 </div>

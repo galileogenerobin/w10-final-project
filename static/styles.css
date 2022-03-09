@@ -17,7 +17,7 @@
 }
 
 
-/* Overriding some Bootstrap body properties (i.e. font family) */
+/* Overriding some Bootstrap body properties (i.e. font family) plus some container styling */
 body {
   font-family: 'Roboto', sans-serif !important;
   background-color: var(--light-gray);
@@ -36,6 +36,10 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
+.home-bg-image {
+  /* background-image: url("/static/slim-container.jpg"); */
+}
+
 
 /* Styling for navigation bar */
 /* Size for brand */
@@ -51,13 +55,17 @@ nav .navbar-brand .white {
 .nav-link
 {
   color: white !important;
+  border-radius: 4px;
+  transition: background-color 0.25s ease-in-out;
+}
+.nav-link:hover {
+  background-color: var(--dark-blue);
 }
 /* Custom class */
 .nav-container {
   border: none;
   background-color: var(--nav-bar-color) !important;
 }
-
 
 /* Styling for the order page */
 select {
@@ -84,6 +92,7 @@ select {
   box-shadow: 0px 1px 4px 3px var(--shadow);
 }
 
+/* Custom order form */
 .order-form {
   margin-top: 1rem;
   background-color: var(--light-gray);
@@ -112,6 +121,10 @@ select {
   border: 1px solid var(--border-gray);
 }
 
+/* Text styling */
+.text-blue {
+  color: var(--blue);
+}
 
 /* Overriding Bootsrap form properties */
 .form-select, .form-control {

@@ -93,13 +93,17 @@ def submit_order():
 
         # if order placed successfully
         if result:
+            # TODO: create better reference number creation            
             ref_number = f"{result:06d}"
-            # return render_template("order-confirmation.html", ref_number=ref_number)
+            # We'll store in a session variable and retrieve in the order_confirmation page
+            session['ref_number'] = ref_number
             
+            # return render_template("order-confirmation.html", ref_number=ref_number)
+
             # Using 'Post-Redirect-Get' design pattern, we will redirect to another route with a get request that will display the confirmation page
-            # Previously (see commented return line above), if we just render a template directly, the form data is still in memory ...
+            # Previously (see commented return line above), if we just render a template directly, the form data is still in memory (cont'd)
             # and refreshing the page will reperform the POST action
-            return redirect(url_for("order_confirmation", ref_number=ref_number))
+            return redirect(url_for("order_confirmation"))
             
         # otherwise
         # TODO: apologize for the error
@@ -111,8 +115,18 @@ def submit_order():
 
 @app.route("/order-confirmation")
 def order_confirmation():
-    ref_number = request.args.get('ref_number')
+    ref_number = session['ref_number']
+    
+    # If no active reference number from the current session, redirect to place order
+    if not ref_number: return redirect("/place-order")
+
     return render_template("order-confirmation.html", ref_number=ref_number)
+
+
+@app.route("/order-status")
+def order_status():
+    # TODO
+    return render_template("order-status.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
