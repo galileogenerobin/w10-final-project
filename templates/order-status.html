@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block head %}
-
+<script src="/static/order-status.js"></script>
 {% endblock %}
 
 {% block title %}
@@ -11,15 +11,74 @@ Order Status
 {% block main %}
 <div class="container-small">
     <div class="mx-0">
-        <!-- TODO: Check if valid reference number -->
-        <h3 class="my-3">Order status</h3>
-        <div class="row my-3 fs-6">
-            TODO!
+
+        <div class="my-4 fs-1 text-blue">Order status</div>
+
+        <div class="row my-4">
+            <form action="/order-status" id="order-status-form" method="POST">
+                <input class="col-12 form-control input-group-entry text-end mb-2" type="text" name="ref-number" value="{{ ref_number }}" placeholder="Enter order reference number">
+                <button class="btn btn-primary col-12" id="check-reference-number" type="button">Check order status</button>
+            </form>
         </div>
-        <div class="row px-2">
-            <button class="btn btn-secondary mt-2" id="home" type="button">Back to Home</button>
-        </div>
-        <!-- TODO: If invalid reference number -->
+
+        <!-- <div class="row">{{ page_state }}</div> -->
+
+        <!-- If valid reference number -->
+        {% if page_state == 'valid ref' %}
+            <div class="mt-4" id="order-details">
+                <div class="row">
+                    <div class="fs-5 text-muted">Order details</div>
+                </div>
+                <div class="row my-3 fs-6">
+                    <div class="col-6 mb-3">
+                        <div>Container Type</div>
+                        <div>Quantity</div>
+                        <div>Swap or New</div>
+                        <div>Delivery Mode</div>
+                    </div>
+                    <div class="col-6 text-muted mb-3 text-end">
+                        <div>{{ result['container_type'] }}</div>
+                        <div>{{ result['quantity'] }}</div>
+                        <div>{{ result['swap_or_new'] }}</div>
+                        <div>{{ result['delivery_mode'] }}</div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="col-6 fw-bold mb-3">
+                        <div class="fs-5">Total</div>
+                    </div>
+                    <div class="col-6 text-end mb-3">
+                        <div class="fw-bold fs-5">{{ (result['quantity'] * result['price_per_unit'] + result['delivery_fee']) | php }}</div>
+                    </div>
+                    
+                    <hr>
+
+                    <div class="col-6">
+                        <div>Paid?</div>
+                        <div class="fw-bold">Status</div>
+                    </div>
+                    <div class="col-6 text-end">
+                        <div>TBD</div>
+                        <div class="fw-bold">TBD</div>
+                    </div>
+                </div>
+            </div>
+        {% elif page_state == 'invalid ref' %}
+            <!-- If invalid reference number -->
+            <div class="my-4 px-3" id="ref-not-found">
+                <div class="row">
+                    Sorry, we could not find an existing order for that reference number.
+                </div>
+            </div>
+        {% endif %}
+        
+        <!-- TODO: Functionality for Cancel Order -->
+        {% if not page_state == 'no ref' %}
+            <div class="row px-2">
+                <button class="btn btn-secondary mt-2" id="home" type="button">BACK TO HOME</button>
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
