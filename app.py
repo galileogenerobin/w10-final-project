@@ -85,11 +85,12 @@ def submit_order():
         delivery_mode = request.form.get("delivery-mode")
         delivery_fee = float(request.form.get("delivery-fee"))
         time_stamp = datetime.now()
+        order_status = "Open"
 
         # result will store the id of the newly inserted row
         result = db.execute(
-            "INSERT INTO orders (container_type, quantity, swap_or_new, price_per_unit, delivery_mode, delivery_fee, txn_timestamp) VALUES (?, ?, ?, ?, ?, ?, ?)", 
-            container_type, quantity, swap_or_new, price_per_unit, delivery_mode, delivery_fee, time_stamp)
+            "INSERT INTO orders (container_type, quantity, swap_or_new, price_per_unit, delivery_mode, delivery_fee, txn_timestamp, order_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
+            container_type, quantity, swap_or_new, price_per_unit, delivery_mode, delivery_fee, time_stamp, order_status)
 
         # if order placed successfully
         if result:

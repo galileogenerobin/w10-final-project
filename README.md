@@ -15,7 +15,7 @@ Pages:
 - Log in page (Admin login only)
 - Manage orders (Only if logged in as admin)
 -   View list of current orders with order details from Order page
--   Present order status (e.g. open, for pickup / delivery, delivery in progress, cancelled, completed) including timestamp for each status change
+-   Present order status (e.g. open, for pickup, for delivery, delivery in progress, cancelled, completed) including timestamp for each status change
 -   Record sales
 - Order history page
 -   Present order history including latest status
