@@ -1,6 +1,10 @@
 // Click handlers for standard buttons throughout the site
 
 $(document).ready(function() {
+    $('#home').click(function() {
+        window.location.href = '/'
+    })
+
     $('#order-now').click(function() {
         window.location.href = '/place-order'
     })
@@ -9,7 +13,7 @@ $(document).ready(function() {
         window.location.href = '/order-status'
     })
 
-    $('#home').click(function() {
-        window.location.href = '/'
+    $('#manage-orders').click(function() {
+        window.location.href = '/manage-orders'
     })
 });

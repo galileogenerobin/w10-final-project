@@ -209,8 +209,29 @@ def logout():
 @app.route("/manage-orders", methods=["GET"])
 @login_required
 def manage_orders():
+    completed = 'Completed'
     """ TODO manage orders page"""
-    return render_template("index.html")
+    # Fetch data from the database
+    orders_data = db.execute("SELECT * FROM orders WHERE NOT order_status = ?", completed)
+
+    # Add reference number
+    for order in orders_data:
+        order['ref_number'] = convert_id_to_ref_number(order['id'])
+
+    current_order = None
+
+    # Check if an order_id was specified in the HTML request
+    if request.args.get('order_id'):
+        id = request.args.get('order_id')
+        current_order = db.execute("SELECT * FROM orders WHERE NOT order_status = ? AND id = ?", completed, id)
+        # Check if there was a result, in which case we grab the first:
+        if not current_order == []:
+            current_order = current_order[0]
+            current_order['ref_number'] = convert_id_to_ref_number(current_order['id'])
+        else:
+            return apology("Order already completed and/or order ID not found.")
+
+    return render_template("manage-orders.html", orders_data=orders_data, current_order=current_order)
 
 
 @app.route("/sales", methods=["GET"])
