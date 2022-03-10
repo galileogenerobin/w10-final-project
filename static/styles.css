@@ -22,6 +22,13 @@ body {
   font-family: 'Roboto', sans-serif !important;
   background-color: var(--light-gray);
 }
+.container-large {
+  max-width: 1080px;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-left: auto;
+  margin-right: auto;
+}
 .container-medium {
   max-width: 720px;
   padding-left: 16px;
@@ -36,10 +43,6 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
-.home-bg-image {
-  /* background-image: url("/static/slim-container.jpg"); */
-}
-
 
 /* Styling for navigation bar */
 /* Size for brand */
@@ -52,10 +55,18 @@ nav .navbar-brand .blue {
 nav .navbar-brand .white {
   color: white;
 }
+.navbar {
+  padding-top: 0;
+  padding-bottom: 0;
+}
 .nav-link
 {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   color: white !important;
-  border-radius: 4px;
+  /* border-radius: 4px; */
   transition: background-color 0.25s ease-in-out;
 }
 .nav-link:hover {
@@ -65,6 +76,10 @@ nav .navbar-brand .white {
 .nav-container {
   border: none;
   background-color: var(--nav-bar-color) !important;
+}
+.home-icon {
+  width: 24px;
+  height: 24px;
 }
 
 /* Styling for the order page */

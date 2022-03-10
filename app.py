@@ -6,7 +6,7 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, login_required, php, check_if_int
+from helpers import apology, login_required, php, check_if_int, convert_id_to_ref_number, convert_ref_number_to_id
 
 # For date and time stamp
 from datetime import date, datetime
@@ -94,7 +94,7 @@ def submit_order():
         # if order placed successfully
         if result:
             # TODO: create better reference number creation            
-            ref_number = f"{result:06d}"
+            ref_number = convert_id_to_ref_number(int(result))
             # We'll store in a session variable and retrieve in the order_confirmation page
             session['ref_number'] = ref_number
             
@@ -123,15 +123,44 @@ def order_confirmation():
     return render_template("order-confirmation.html", ref_number=ref_number)
 
 
-@app.route("/order-status")
+@app.route("/order-status", methods=["GET", "POST"])
 def order_status():
-    # TODO
-    return render_template("order-status.html")
+    # POST
+    if request.method == "POST":
+        # Get reference number provided by user
+        ref_number = request.form.get('ref-number')
+
+        # Check if valid ref_number:
+        # Convert ref_number to id to check
+        check_id = convert_ref_number_to_id(ref_number)
+
+        # If invalid ref_number hash
+        if not check_id:
+            result = []
+            page_state = 'invalid ref'
+            return render_template("order-status.html", ref_number=ref_number, page_state=page_state, result=result)
+
+        # Check if ref_number exists in database
+        result = db.execute("SELECT * FROM orders WHERE id = ?", check_id)
+        
+        if not result == []:
+            result=result[0]
+            page_state = 'valid ref'
+        else:
+            page_state = 'invalid ref'
+        
+        return render_template("order-status.html", ref_number=ref_number, page_state=page_state, result=result)
+    
+    # GET
+    else:
+        return render_template("order-status.html", ref_number='', page_state='no ref', result=[])
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in"""
+
+    # TODO: Handle page errors / update apology
 
     # Forget any user_id
     session.clear()

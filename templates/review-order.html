@@ -26,43 +26,43 @@ Review Order
             </div>
         </div>
 
-        <h3 class="my-3">Review order details</h3>
+        <div class="my-3 fs-2 text-blue">Review order details</div>
         <!--We will store the order data in a form that will be hidden so we can submit in a POST request-->
         <form id="submit-order-form" action="/submit-order" method="post">
-            <input class="form-control form-read-only text-end text-muted" type="hidden" name="container-type" value="{{ container_type }}">
-            <input class="form-control form-read-only text-end text-muted" type="hidden" name="quantity" value="{{ quantity }}">
-            <input class="form-control form-read-only text-end text-muted" type="hidden" name="swap-or-new" value="{{ swap_or_new }}">
-            <input class="form-control form-read-only text-end text-muted" type="hidden" name="price" value="{{ price_per_unit }}">
-            <input class="form-control form-read-only text-end text-muted" type="hidden" name="delivery-mode" value="{{ delivery_mode }}">
-            <input class="form-control form-read-only text-end text-muted" type="hidden" name="delivery-fee" value="{{ delivery_fee }}">
+            <input type="hidden" name="container-type" value="{{ container_type }}">
+            <input type="hidden" name="quantity" value="{{ quantity }}">
+            <input type="hidden" name="swap-or-new" value="{{ swap_or_new }}">
+            <input type="hidden" name="price" value="{{ price_per_unit }}">
+            <input type="hidden" name="delivery-mode" value="{{ delivery_mode }}">
+            <input type="hidden" name="delivery-fee" value="{{ delivery_fee }}">
         </form>
         <div class="row my-3 fs-6">
-            <div class="col-6 fw-bold mb-3">
+            <div class="col-6 text-muted fw-bold mb-3">
                 <div>Container Type</div>
                 <div>Quantity</div>
                 <div>Swap or New</div>
             </div>
-            <div class="col-6 text-muted mb-3 text-end">
+            <div class="col-6 mb-3 text-end">
                 <div>{{ container_type }}</div>
                 <div>{{ quantity }}</div>
                 <div>{{ swap_or_new }}</div>
             </div>
             <hr>
-            <div class="col-6 fw-bold mb-3">
+            <div class="col-6 text-muted fw-bold mb-3">
                 <div>Subtotal</div>
                 <div>Delivery fee</div>
             </div>
-            <div class="col-6 text-muted text-end mb-3">
+            <div class="col-6 text-end mb-3">
                 <div class="fw-bold">{{ (price_per_unit * quantity) | php }}</div>
                 <div>{{ delivery_fee | php }}</div>
             </div>
             <hr>
-            <div class="col-6 fw-bold fs-5">Total</div>
-            <div class="col-6 text-end fw-bold fs-5">{{ (price_per_unit * quantity + delivery_fee) | php }}</div>
+            <div class="col-6 text-muted fw-bold fs-4">Total</div>
+            <div class="col-6 text-end fw-bold fs-4">{{ (price_per_unit * quantity + delivery_fee) | php }}</div>
         </div>
         <div class="row px-2">
-            <button class="btn btn-primary mt-2" id="submit-order" type="button">Confirm order</button>
-            <button class="btn btn-secondary mt-2" id="edit-order" type="button">Back</button>
+            <button class="btn btn-primary mt-2" id="submit-order" type="button">CONFIRM ORDER</button>
+            <button class="btn btn-secondary mt-2" id="edit-order" type="button">BACK</button>
         </div>
     </div>
 </div>
