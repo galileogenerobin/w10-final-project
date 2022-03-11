@@ -55,11 +55,9 @@ Order Status
                     <hr>
 
                     <div class="col-6">
-                        <div>Payment Status</div>
                         <div>Order Status</div>
                     </div>
                     <div class="col-6 text-end">
-                        <div>TBD</div>
                         <div class="fw-bold">{{ result['order_status'] }}</div>
                     </div>
                 </div>
@@ -73,7 +71,9 @@ Order Status
             </div>
         {% endif %}
         
-        <!-- TODO: Functionality for Cancel Order -->
+        <div class="text-red">TODO: Functionality for Cancel Order</div>
+        <div class="text-red">TODO: Functionality for Update Order</div>
+
         {% if not page_state == 'no ref' %}
             <div class="row px-2">
                 <button class="btn btn-secondary mt-2" id="home" type="button">BACK TO HOME</button>

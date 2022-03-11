@@ -151,10 +151,6 @@ select {
   border: 1px solid var(--border-gray);
 }
 
-/* Text styling */
-.text-blue {
-  color: var(--blue);
-}
 
 /* Overriding Bootsrap form properties */
 .form-select, .form-control {
@@ -217,6 +213,12 @@ select {
 /* Text styling */
 .text-small {
   font-size: 0.75rem;
+}
+.text-blue {
+  color: var(--blue);
+}
+.text-red {
+  color: var(--red);
 }
 .not-bold {
   font-weight: normal !important;

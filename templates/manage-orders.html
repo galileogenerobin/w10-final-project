@@ -13,6 +13,15 @@ Manage Orders
 <div class="container text-center">
     <div class="my-4 fs-1 text-blue">Manage Orders</div>
 
+    <div class="text-center my-4 fs-5">
+    {% if update_status == 'success' %}
+    <div class="text-blue">Order status successfully updated!</div>
+    {% elif update_status == 'failure' %}
+    <div class="text-red">Order status failed to update!</div>
+    {% endif %}
+    </div>
+
+    <div class="text-red">TODO add filters for Manage Orders table</div>
     <!-- Default view -->
     <div class="table-responsive">
         <table class="table table-hover">
@@ -28,7 +37,6 @@ Manage Orders
                     <th>Delivery Fee</th>
                     <th>Order Timestamp</th>
                     <th>Order Status</th>
-                    <th>Payment Status</th>
                     <th>Update Status</th>
                 </tr>
             </thead>
@@ -45,7 +53,6 @@ Manage Orders
                     <td>{{ order['delivery_fee'] | php}}</td>
                     <td>{{ order['txn_timestamp'] }}</td>
                     <td>{{ order['order_status'] }}</td>
-                    <td>TBD - payment status</td>
                     <td>
                         <div class="row mx-1">
                             <form action="/manage-orders" method="GET" id="{{ 'form' ~ order['id'] }}">
@@ -61,7 +68,7 @@ Manage Orders
     </div>
 </div>
 
-{% elif not current_order == None %}
+{% elif not current_order == None%}
 <!-- Specific order view -->
 <div class="container-small">
     <div class="mt-4">
@@ -89,7 +96,7 @@ Manage Orders
                 <div>Order Timestamp</div>
             </div>
             <div class="col-6 text-muted mb-3 text-end">
-                <div>{{ current_order['id'] }}</div>
+                <div id="current_order-id">{{ current_order['id'] }}</div>
                 <div>{{ current_order['ref_number'] }}</div>
                 <div>{{ current_order['container_type'] }}</div>
                 <div>{{ current_order['quantity'] }}</div>
@@ -111,13 +118,26 @@ Manage Orders
             
             <hr>
 
-            <div class="col-6">
-                <div>Payment Status</div>
-                <div>Order Status</div>
-            </div>
-            <div class="col-6 text-end">
-                <div>TBD</div>
-                <div class="fw-bold">{{ current_order['order_status'] }}</div>
+            <form action="/update-order-status" method="GET" id="update-order-status-form">
+                <div class="input-group">
+                    <div class="input-group-text">Order Status</div>
+                        <!-- We are using python naming convention for the form names so we can call url_for() and supply the arguments -->
+                        <!-- E.g. redirect(url_for(update_order_status, new_order_status='Canceled', current_order_id=2)) -->
+                        <!-- hyphenated naming convetion will not work in python -->
+                        <select class="form-select no-selection text-end input-group-entry" id="order-status-dropdown" name="new_order_status">
+                            {% for status in order_status %}
+                            <option value="{{ status }}">{{ status }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="text" hidden readonly name="current_order_id" value="{{ current_order['id'] }}">
+                        <input type="text" hidden readonly name="current_order_status" value="{{ current_order['order_status'] }}" id="current-order-status">
+                </div>
+            </form>
+
+            <div class="text-red">TODO: Order status dropdown should differ between pickup and delivery</div>
+
+            <div class="row my-3 mx-0">
+                <button class="btn btn-primary" id="update-order-status" type="button" disabled>UPDATE ORDER STATUS</button>
             </div>
         </div>
     </div>
