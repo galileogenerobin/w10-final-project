@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% block head %}
+<script src="/static/manage-orders.js"></script>
 {% endblock %}
 
 {% block title %}
@@ -8,7 +9,138 @@ Manage Orders
 {% endblock %}
 
 {% block main %}
-<div class="container-fluid text-center">
-    <div class="fs-1 text-blue">Manager Orders</div>
+{% if current_order == None %}
+<div class="container text-center">
+    <div class="my-4 fs-1 text-blue">Manage Orders</div>
+
+    <div class="text-center my-4 fs-5">
+    {% if update_status == 'success' %}
+    <div class="text-blue">Order status successfully updated!</div>
+    {% elif update_status == 'failure' %}
+    <div class="text-red">Order status failed to update!</div>
+    {% endif %}
+    </div>
+
+    <div class="text-red">TODO add filters for Manage Orders table</div>
+    <!-- Default view -->
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Ref Number</th>
+                    <th>Container Type</th>
+                    <th>Quantity</th>
+                    <th>Swap or New</th>
+                    <th>Price per Unit</th>
+                    <th>Delivery Mode</th>
+                    <th>Delivery Fee</th>
+                    <th>Order Timestamp</th>
+                    <th>Order Status</th>
+                    <th>Update Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders_data %}
+                <tr>
+                    <td>{{ order['id'] }}</td>
+                    <td>{{ order['ref_number'] }}</td>
+                    <td>{{ order['container_type'] }}</td>
+                    <td>{{ order['quantity'] }}</td>
+                    <td>{{ order['swap_or_new'] }}</td>
+                    <td>{{ order['price_per_unit'] | php}}</td>
+                    <td>{{ order['delivery_mode'] }}</td>
+                    <td>{{ order['delivery_fee'] | php}}</td>
+                    <td>{{ order['txn_timestamp'] }}</td>
+                    <td>{{ order['order_status'] }}</td>
+                    <td>
+                        <div class="row mx-1">
+                            <form action="/manage-orders" method="GET" id="{{ 'form' ~ order['id'] }}">
+                                <input type="text" hidden name="order_id" id="{{ 'input' ~ order['id'] }}" value="{{ order['id'] }}">
+                            </form>
+                            <button class="btn btn-primary text-small" id="{{ order['id'] }}" type="button">UPDATE</button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
+
+{% elif not current_order == None%}
+<!-- Specific order view -->
+<div class="container-small">
+    <div class="mt-4">
+        <button class="btn btn-secondary col-3 text-small" id="manage-orders">
+            <svg xmlns="/static/arrow-left.svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+            </svg>
+            BACK
+        </button>
+    </div>
+    <div class="mt-3" id="order-details">
+        <div class="row">
+            <div class="fs-5 text-muted">Order details</div>
+        </div>
+        <div class="row my-3 fs-6">
+            <div class="col-6 mb-3">
+                <div>Order ID</div>
+                <div>Reference Number</div>
+                <div>Container Type</div>
+                <div>Quantity</div>
+                <div>Swap or New</div>
+                <div>Price Per Unit</div>
+                <div>Delivery Mode</div>
+                <div>Delivery Fee</div>
+                <div>Order Timestamp</div>
+            </div>
+            <div class="col-6 text-muted mb-3 text-end">
+                <div id="current_order-id">{{ current_order['id'] }}</div>
+                <div>{{ current_order['ref_number'] }}</div>
+                <div>{{ current_order['container_type'] }}</div>
+                <div>{{ current_order['quantity'] }}</div>
+                <div>{{ current_order['swap_or_new'] }}</div>
+                <div>{{ current_order['price_per_unit'] }}</div>
+                <div>{{ current_order['delivery_mode'] }}</div>
+                <div>{{ current_order['delivery_fee'] }}</div>
+                <div>{{ current_order['txn_timestamp'] }}</div>
+            </div>
+            
+            <hr>
+            
+            <div class="col-6 fw-bold mb-3">
+                <div class="fs-5">Total</div>
+            </div>
+            <div class="col-6 text-end mb-3">
+                <div class="fw-bold fs-5">{{ (current_order['quantity'] * current_order['price_per_unit'] + current_order['delivery_fee']) | php }}</div>
+            </div>
+            
+            <hr>
+
+            <form action="/update-order-status" method="GET" id="update-order-status-form">
+                <div class="input-group">
+                    <div class="input-group-text">Order Status</div>
+                        <!-- We are using python naming convention for the form names so we can call url_for() and supply the arguments -->
+                        <!-- E.g. redirect(url_for(update_order_status, new_order_status='Canceled', current_order_id=2)) -->
+                        <!-- hyphenated naming convetion will not work in python -->
+                        <select class="form-select no-selection text-end input-group-entry" id="order-status-dropdown" name="new_order_status">
+                            {% for status in order_status %}
+                            <option value="{{ status }}">{{ status }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="text" hidden readonly name="current_order_id" value="{{ current_order['id'] }}">
+                        <input type="text" hidden readonly name="current_order_status" value="{{ current_order['order_status'] }}" id="current-order-status">
+                </div>
+            </form>
+
+            <div class="text-red">TODO: Order status dropdown should differ between pickup and delivery</div>
+
+            <div class="row my-3 mx-0">
+                <button class="btn btn-primary" id="update-order-status" type="button" disabled>UPDATE ORDER STATUS</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 {% endblock %}

@@ -6,7 +6,7 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, login_required, php, check_if_int, convert_id_to_ref_number, convert_ref_number_to_id
+from helpers import apology, login_required, php, check_if_int, convert_id_to_ref_number, convert_ref_number_to_id, ORDER_STATUS
 
 # For date and time stamp
 from datetime import date, datetime
@@ -53,7 +53,6 @@ def place_order():
 
 @app.route("/review-order", methods=["GET", "POST"])
 def review_order():
-    """ TODO review order"""
     # If HTML POST request
     if request.method == "POST":
         container_type = request.form.get("container-type")
@@ -209,15 +208,54 @@ def logout():
 @app.route("/manage-orders", methods=["GET"])
 @login_required
 def manage_orders():
-    """ TODO manage orders page"""
-    return render_template("index.html")
+    # Initialize values for current order and update status
+    orders_data = None
+    current_order = None
+    order_id = request.args.get('order_id')
+    update_status = request.args.get('update')
+
+    # If an order_id was not specified in the HTML request, we show the default table of values
+    if not order_id:
+        # Fetch data from the database
+        orders_data = db.execute("SELECT * FROM orders")
+
+        # Add reference number
+        for order in orders_data:
+            order['ref_number'] = convert_id_to_ref_number(order['id'])
+
+    # Otherwise, we present the data for the selected order_id
+    else:
+        current_order = db.execute("SELECT * FROM orders WHERE id = ?", order_id)
+        # Check if there was a result:
+        if not current_order == []:
+            current_order = current_order[0]
+            # Add reference number
+            current_order['ref_number'] = convert_id_to_ref_number(current_order['id'])
+        # Otherwise
+        else:
+            return apology("Order already completed and/or order ID not found.")
+
+    return render_template("manage-orders.html", orders_data=orders_data, current_order=current_order, order_status=ORDER_STATUS, update_status=update_status)
 
 
-@app.route("/sales", methods=["GET"])
+@app.route("/update-order-status", methods=["GET", "POST"])
 @login_required
-def manage_sales():
-    """ TODO sales page"""
-    return render_template("index.html")
+def update_order_status():
+    # Get form data from POST request
+    order_status = request.args.get('new_order_status')
+    order_id = request.args.get('current_order_id')
+    update = None
+    update_status = 'failure'
+
+    # check if the order_status is in the list of available statuses
+    if order_status in ORDER_STATUS:
+        update = db.execute("UPDATE orders SET order_status = ? WHERE id = ?", order_status, order_id)
+        # TODO: add SQL to update order change log table
+
+    # If the UPDATE query was successful
+    if update: update_status = 'success'
+
+    return redirect(url_for("manage_orders", update=update_status))
 
 
 @app.route("/history", methods=["GET"])

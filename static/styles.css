@@ -44,6 +44,23 @@ body {
   margin-right: auto;
 }
 
+/* Styling for mobile screens and non-mobile screens */
+.div-only-mobile {
+  display: none;
+}
+.div-no-mobile {
+  display: block;
+}
+@media screen and (max-width: 849px) {
+.div-no-mobile {
+  display:none
+}
+.div-only-mobile {
+  display: block;
+}
+
+}
+
 /* Styling for navigation bar */
 /* Size for brand */
 nav .navbar-brand {
@@ -88,9 +105,7 @@ select {
   height: 2rem;
   font-size: 1rem !important;
 }
-.not-bold {
-  font-weight: normal !important;
-}
+
 
 /* To be applied to the select forms if no valid entry is selected yet */
 .no-selection {
@@ -136,10 +151,6 @@ select {
   border: 1px solid var(--border-gray);
 }
 
-/* Text styling */
-.text-blue {
-  color: var(--blue);
-}
 
 /* Overriding Bootsrap form properties */
 .form-select, .form-control {
@@ -187,7 +198,7 @@ select {
 /* Overriding Bootstrap button properties */
 .btn {
   border-radius: 20px !important;
-  font-weight: bold;
+  /* font-weight: bold; */
 }
 .btn-primary {
   background-color: var(--blue) !important;
@@ -198,7 +209,17 @@ select {
   border-color: var(--dark-blue) !important;
 }
 
-/* If we want to hide something; not used yet */
-.hidden {
-  display: none;
+
+/* Text styling */
+.text-small {
+  font-size: 0.75rem;
+}
+.text-blue {
+  color: var(--blue);
+}
+.text-red {
+  color: var(--red);
+}
+.not-bold {
+  font-weight: normal !important;
 }

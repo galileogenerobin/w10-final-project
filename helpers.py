@@ -4,6 +4,15 @@ import math
 import re
 
 
+ORDER_STATUS = [
+    "Open",
+    "Cancelled",
+    "Delivery in progress",
+    "Ready for pickup",
+    "Completed"
+]
+
+
 def apology(message, code=400):
     """Render message as an apology to user."""
     def escape(s):
