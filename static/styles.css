@@ -13,6 +13,7 @@
   --yellow: #f5b82e;
   --green: #2e944b;
   --shadow: rgb(201, 201, 201);
+  --gray: rgb(108, 117, 125);
   --light-gray: rgb(248, 249, 250);
   --border-gray: rgb(216, 212, 218);
   --nav-bar-color: rgb(36, 139, 224);
@@ -225,7 +226,25 @@ select {
   font-weight: normal !important;
 }
 
+/* Progress bar styling */
+.progress {
+  height: 1px;
+}
+.progress-bar {
+  background-color: var(--blue);
+}
+.progress-node-active {
+  height: 2rem;
+  width: 2rem;
+  background-color: var(--blue);
+}
+.progress-node-disabled {
+  height: 2rem;
+  width: 2rem;
+  background-color: var(--gray);
+}
 
 .todo {
-  color: var(--red)
+  color: var(--red);
+  /* display: none; */
 }

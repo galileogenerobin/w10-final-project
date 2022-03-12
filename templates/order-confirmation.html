@@ -13,15 +13,13 @@ Order Confirmation
         <div class="row mx-0">
             <div class="mx-auto mt-4">
                 <div class="position-relative m-4">
-                    <!-- TODO: move styling to css file -->
-                    <div class="progress" style="height: 1px;">
-                        <div class="progress-bar" role="progressbar" style="width: 100%; background-color: var(--blue);"></div>
+                    <div class="progress">
+                        <div class="progress-bar w-100" role="progressbar"></div>
                     </div>
-                    <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 2rem; height:2rem; background-color:white; border: 3px solid var(--blue);"></button>
-                    <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 2rem; height:2rem;"></button>
-                    <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 2rem; height:2rem;"></button>
+                    <div class="position-absolute top-0 start-0 translate-middle rounded-pill progress-node-active"></div>
+                    <div class="position-absolute top-0 start-50 translate-middle rounded-pill progress-node-active"></div>
+                    <div class="position-absolute top-0 start-100 translate-middle rounded-pill progress-node-active"></div>
                 </div>
-                <div class="todo">TODO progress bar</div>
             </div>
         </div>
 
