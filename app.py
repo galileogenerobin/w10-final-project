@@ -6,7 +6,7 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, login_required, php, update_order_status_db, convert_id_to_ref_number, convert_ref_number_to_id, ORDER_STATUS
+from helpers import apology, login_required, php, update_order_status_db, convert_id_to_ref_number, convert_ref_number_to_id, ORDER_STATUS_PICKUP, ORDER_STATUS_DELIVERY
 
 # For date and time stamp
 from datetime import datetime
@@ -83,16 +83,21 @@ def submit_order():
         price_per_unit = float(request.form.get("price"))
         delivery_mode = request.form.get("delivery-mode")
         delivery_fee = float(request.form.get("delivery-fee"))
-        time_stamp = datetime.now()
-        order_status = "Open"
+        timestamp = datetime.now()
+        order_status = 'Open'
+        current_user = session['user']
 
         # result will store the id of the newly inserted row
         result = db.execute(
             "INSERT INTO orders (container_type, quantity, swap_or_new, price_per_unit, delivery_mode, delivery_fee, txn_timestamp, order_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
-            container_type, quantity, swap_or_new, price_per_unit, delivery_mode, delivery_fee, time_stamp, order_status)
+            container_type, quantity, swap_or_new, price_per_unit, delivery_mode, delivery_fee, timestamp, order_status)
 
-        # If order placed successfully
+        # If order placed successfully, the row id will be returned to us
         if result:
+            # Add record in the order change log
+            db.execute("INSERT INTO order_change_log (order_id, old_status, new_status, timestamp, changed_by) VALUES (?, ?, ?, ?, ?)",
+                result, '-', order_status, timestamp, current_user)
+
             # Create reference number hash from the id of the newly created order
             ref_number = convert_id_to_ref_number(int(result))
             # We'll store in a session variable and retrieve in the order_confirmation page
@@ -160,8 +165,6 @@ def order_status():
 def login():
     """Log user in"""
 
-    # TODO: Handle page errors / update apology
-
     # Forget any user_id
     session.clear()
 
@@ -170,18 +173,18 @@ def login():
 
         # Ensure username was submitted
         if not request.form.get("username"):
-            return apology("must provide username", 400)
+            return apology("Must provide username", 400)
 
         # Ensure password was submitted
         elif not request.form.get("password"):
-            return apology("must provide password", 400)
+            return apology("Must provide password", 400)
 
         # Query database for username
         rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-            return apology("invalid username and/or password", 403)
+            return render_template("login.html", incorrect_credentials=True)
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
@@ -192,7 +195,7 @@ def login():
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
-        return render_template("login.html")
+        return render_template("login.html", incorrect_credentials=False)
 
 
 @app.route("/logout")
@@ -214,6 +217,7 @@ def manage_orders():
     current_order = None
     order_id = request.args.get('order_id')
     update_status = request.args.get('update')
+    order_status = []
 
     # If an order_id was not specified in the HTML request, we show the default table of values
     if not order_id:
@@ -232,11 +236,13 @@ def manage_orders():
             current_order = current_order[0]
             # Add reference number
             current_order['ref_number'] = convert_id_to_ref_number(current_order['id'])
+            # Select which order status to show in the dropdown
+            order_status = ORDER_STATUS_DELIVERY if current_order['delivery_mode'] == 'Delivery' else ORDER_STATUS_PICKUP
         # Otherwise
         else:
-            return apology("Order already completed and/or order ID not found.")
+            return apology("Order ID not found.")
 
-    return render_template("manage-orders.html", orders_data=orders_data, current_order=current_order, order_status=ORDER_STATUS, update_status=update_status)
+    return render_template("manage-orders.html", orders_data=orders_data, current_order=current_order, order_status=order_status, update_status=update_status)
 
 
 @app.route("/update-order-status", methods=["GET", "POST"])

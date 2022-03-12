@@ -5,28 +5,34 @@ import re
 from datetime import datetime
 
 
-ORDER_STATUS = [
+ORDER_STATUS_PICKUP = [
+    "Open",
+    "Cancelled",
+    "Ready for pickup",
+    "Completed"
+]
+
+ORDER_STATUS_DELIVERY = [
     "Open",
     "Cancelled",
     "Delivery in progress",
-    "Ready for pickup",
     "Completed"
 ]
 
 
 def apology(message, code=400):
     """Render message as an apology to user."""
-    def escape(s):
-        """
-        Escape special characters.
+    # def escape(s):
+    #     """
+    #     Escape special characters.
 
-        https://github.com/jacebrowning/memegen#special-characters
-        """
-        for old, new in [("-", "--"), (" ", "-"), ("_", "__"), ("?", "~q"),
-                         ("%", "~p"), ("#", "~h"), ("/", "~s"), ("\"", "''")]:
-            s = s.replace(old, new)
-        return s
-    return render_template("apology.html", top=code, bottom=escape(message)), code
+    #     https://github.com/jacebrowning/memegen#special-characters
+    #     """
+    #     for old, new in [("-", "--"), (" ", "-"), ("_", "__"), ("?", "~q"),
+    #                      ("%", "~p"), ("#", "~h"), ("/", "~s"), ("\"", "''")]:
+    #         s = s.replace(old, new)
+    #     return s
+    return render_template("apology.html", code=code, message=message), code
 
 
 def login_required(f):
@@ -113,7 +119,7 @@ def update_order_status_db(db_conn, order_id, old_order_status, new_order_status
     update = None
 
     # check if the order_status is in the list of available statuses
-    if new_order_status in ORDER_STATUS:
+    if new_order_status in ORDER_STATUS_DELIVERY or new_order_status in ORDER_STATUS_PICKUP:
         update = db_conn.execute("UPDATE orders SET order_status = ? WHERE id = ?", new_order_status, order_id)
         # Add an entry to the order change log table
         db_conn.execute("INSERT INTO order_change_log (order_id, old_status, new_status, timestamp, changed_by) VALUES (?, ?, ?, ?, ?)",
