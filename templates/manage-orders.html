@@ -21,7 +21,7 @@ Manage Orders
     {% endif %}
     </div>
 
-    <div class="text-red">TODO add filters for Manage Orders table</div>
+    <div class="todo">TODO add filters for Manage Orders table</div>
     <!-- Default view -->
     <div class="table-responsive">
         <table class="table table-hover">
@@ -101,9 +101,9 @@ Manage Orders
                 <div>{{ current_order['container_type'] }}</div>
                 <div>{{ current_order['quantity'] }}</div>
                 <div>{{ current_order['swap_or_new'] }}</div>
-                <div>{{ current_order['price_per_unit'] }}</div>
+                <div>{{ current_order['price_per_unit'] | php }}</div>
                 <div>{{ current_order['delivery_mode'] }}</div>
-                <div>{{ current_order['delivery_fee'] }}</div>
+                <div>{{ current_order['delivery_fee'] | php }}</div>
                 <div>{{ current_order['txn_timestamp'] }}</div>
             </div>
             
@@ -134,7 +134,7 @@ Manage Orders
                 </div>
             </form>
 
-            <div class="text-red">TODO: Order status dropdown should differ between pickup and delivery</div>
+            <div class="todo">TODO: Order status dropdown should differ between pickup and delivery</div>
 
             <div class="row my-3 mx-0">
                 <button class="btn btn-primary" id="update-order-status" type="button" disabled>UPDATE ORDER STATUS</button>

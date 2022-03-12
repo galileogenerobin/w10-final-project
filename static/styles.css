@@ -1,6 +1,8 @@
 /* Importing fonts from Google APIs */
 @import url("https://fonts.googleapis.com/css?family=Montserrat");
 @import url("https://fonts.googleapis.com/css?family=Roboto");
+@import url("https://fonts.googleapis.com/css?family=Poppins");
+@import url("https://fonts.googleapis.com/css?family=League+Spartan");
 
 /* Setting up custom variables */
 :root {
@@ -19,7 +21,7 @@
 
 /* Overriding some Bootstrap body properties (i.e. font family) plus some container styling */
 body {
-  font-family: 'Roboto', sans-serif !important;
+  font-family: 'Poppins', sans-serif !important;
   background-color: var(--light-gray);
 }
 .container-large {
@@ -52,13 +54,12 @@ body {
   display: block;
 }
 @media screen and (max-width: 849px) {
-.div-no-mobile {
-  display:none
-}
-.div-only-mobile {
-  display: block;
-}
-
+  .div-no-mobile {
+    display:none
+  }
+  .div-only-mobile {
+    display: block;
+  }
 }
 
 /* Styling for navigation bar */
@@ -222,4 +223,9 @@ select {
 }
 .not-bold {
   font-weight: normal !important;
+}
+
+
+.todo {
+  color: var(--red)
 }

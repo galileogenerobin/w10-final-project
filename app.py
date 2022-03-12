@@ -6,10 +6,10 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, login_required, php, check_if_int, convert_id_to_ref_number, convert_ref_number_to_id, ORDER_STATUS
+from helpers import apology, login_required, php, update_order_status_db, convert_id_to_ref_number, convert_ref_number_to_id, ORDER_STATUS
 
 # For date and time stamp
-from datetime import date, datetime
+from datetime import datetime
 
 # Configure application
 app = Flask(__name__)
@@ -91,9 +91,9 @@ def submit_order():
             "INSERT INTO orders (container_type, quantity, swap_or_new, price_per_unit, delivery_mode, delivery_fee, txn_timestamp, order_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
             container_type, quantity, swap_or_new, price_per_unit, delivery_mode, delivery_fee, time_stamp, order_status)
 
-        # if order placed successfully
+        # If order placed successfully
         if result:
-            # TODO: create better reference number creation            
+            # Create reference number hash from the id of the newly created order
             ref_number = convert_id_to_ref_number(int(result))
             # We'll store in a session variable and retrieve in the order_confirmation page
             session['ref_number'] = ref_number
@@ -104,10 +104,10 @@ def submit_order():
             # Previously (see commented return line above), if we just render a template directly, the form data is still in memory (cont'd)
             # and refreshing the page will reperform the POST action
             return redirect(url_for("order_confirmation"))
-            
-        # otherwise
-        # TODO: apologize for the error
-        return ("/place-order")
+        
+        # Otherwise
+        return apology("something went wrong", 500)
+        
 
     else:
         return redirect("/place-order")
@@ -185,6 +185,7 @@ def login():
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
+        session["user"] = rows[0]["username"]
 
         # Redirect user to home page
         return redirect("/manage-orders")
@@ -242,15 +243,14 @@ def manage_orders():
 @login_required
 def update_order_status():
     # Get form data from POST request
-    order_status = request.args.get('new_order_status')
     order_id = request.args.get('current_order_id')
-    update = None
+    old_order_status = request.args.get('current_order_status')
+    new_order_status = request.args.get('new_order_status')
+    current_user = session["user"]
     update_status = 'failure'
 
-    # check if the order_status is in the list of available statuses
-    if order_status in ORDER_STATUS:
-        update = db.execute("UPDATE orders SET order_status = ? WHERE id = ?", order_status, order_id)
-        # TODO: add SQL to update order change log table
+    # Update order status using the inputs above
+    update = update_order_status_db(db, order_id, old_order_status, new_order_status, current_user)
 
     # If the UPDATE query was successful
     if update: update_status = 'success'
@@ -258,8 +258,26 @@ def update_order_status():
     return redirect(url_for("manage_orders", update=update_status))
 
 
-@app.route("/history", methods=["GET"])
+@app.route("/order-history", methods=["GET"])
 @login_required
 def order_history():
-    """ TODO order history page"""
-    return render_template("index.html")
+    ref_number = request.args.get('ref_number')
+    order_id = convert_ref_number_to_id(ref_number)
+    orders = None
+
+    # If a ref number is provided
+    if ref_number:
+        orders = []
+        ref_number = ref_number.upper()
+        # If all orders requested
+        if ref_number == 'all' or ref_number == 'ALL':
+            orders = db.execute("SELECT * FROM order_change_log")
+        elif order_id:
+            orders = db.execute("SELECT * FROM order_change_log WHERE order_id = ?", order_id)
+
+    # Create reference numbers
+    if orders:
+        for order in orders:
+            order['ref_number'] = convert_id_to_ref_number(order['order_id'])
+
+    return render_template("order-history.html", ref_number=ref_number, orders=orders)

@@ -2,6 +2,7 @@ from flask import redirect, render_template, session
 from functools import wraps
 import math
 import re
+from datetime import datetime
 
 
 ORDER_STATUS = [
@@ -84,7 +85,7 @@ def convert_ref_number_to_id(ref_number):
     ref_number = str(ref_number).upper()
 
     # Check hash list format
-    if not re.match(pattern="[A-Z]*[0-9]{3}[0-9]{3}", string=ref_number):
+    if not re.match(pattern="^[A-Z]*[0-9]{3}[0-9]{3}$", string=ref_number):
         return None
 
     hash_list = ref_number
@@ -103,3 +104,19 @@ def convert_ref_number_to_id(ref_number):
         return None
 
     return int(reverse_hash / 97)
+
+
+# Update oder status in the DB
+def update_order_status_db(db_conn, order_id, old_order_status, new_order_status, current_user):
+    # Get form data from POST request
+    timestamp = datetime.now()
+    update = None
+
+    # check if the order_status is in the list of available statuses
+    if new_order_status in ORDER_STATUS:
+        update = db_conn.execute("UPDATE orders SET order_status = ? WHERE id = ?", new_order_status, order_id)
+        # Add an entry to the order change log table
+        db_conn.execute("INSERT INTO order_change_log (order_id, old_status, new_status, timestamp, changed_by) VALUES (?, ?, ?, ?, ?)",
+            order_id, old_order_status, new_order_status, timestamp, current_user)
+
+    return update
