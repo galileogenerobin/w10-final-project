@@ -246,5 +246,5 @@ select {
 
 .todo {
   color: var(--red);
-  /* display: none; */
+  display: none;
 }

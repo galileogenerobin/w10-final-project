@@ -85,7 +85,6 @@ def submit_order():
         delivery_fee = float(request.form.get("delivery-fee"))
         timestamp = datetime.now()
         order_status = 'Open'
-        current_user = session['user']
 
         # result will store the id of the newly inserted row
         result = db.execute(
@@ -96,7 +95,7 @@ def submit_order():
         if result:
             # Add record in the order change log
             db.execute("INSERT INTO order_change_log (order_id, old_status, new_status, timestamp, changed_by) VALUES (?, ?, ?, ?, ?)",
-                result, '-', order_status, timestamp, current_user)
+                result, '-', order_status, timestamp, 'Customer')
 
             # Create reference number hash from the id of the newly created order
             ref_number = convert_id_to_ref_number(int(result))
@@ -190,7 +189,7 @@ def login():
         session["user_id"] = rows[0]["id"]
         session["user"] = rows[0]["username"]
 
-        # Redirect user to home page
+        # Redirect user to admin module landing page
         return redirect("/manage-orders")
 
     # User reached route via GET (as by clicking a link or via redirect)
